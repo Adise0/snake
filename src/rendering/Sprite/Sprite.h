@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #include <vector>
 
@@ -8,14 +9,12 @@ namespace Rendering {
 class Sprite {
 public:
   vector<string> data;
-  short width;
   short height;
+  short width;
 
-  Sprite(vector<string> data, short width, short height) {
-    this->data = data;
-    this->width = width;
-    this->height = height;
-  }
+  Sprite(vector<string> data);
+
+  vector<u32string> GetStrings32();
 };
 
 } // namespace Rendering

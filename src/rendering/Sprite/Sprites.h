@@ -1,18 +1,16 @@
-#include "Sprites.h"
+#pragma once
+#include "Sprite.h"
 #include <string>
 #include <vector>
-using namespace std;
+
 
 namespace Snake {
 namespace Rendering {
 namespace Sprites {
 
-
-Sprite background1(vector<string>{"::::", "::::"});
-Sprite background2(vector<string>{"┌──┐", "└──┘"});
-
+extern Sprite background1;
+extern Sprite background2; // (maybe typo, but I'll keep your name)
 
 } // namespace Sprites
 } // namespace Rendering
 } // namespace Snake
-
