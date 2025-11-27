@@ -4,14 +4,26 @@
 #include <chrono>
 #include <windows.h>
 
+bool travelingRight = true;
+
 void tick(float dt) {
   Renderable &rend = Snake::Data::Renderables::testRenderable();
   // cout << to_string(dt) << endl;
 
-  rend.position.x += 10 * dt;
+  if (travelingRight == true && rend.position.x + 10 * dt + rend.sprite.width <= RESOLUTION_X) {
+    rend.position.x += 10 * dt;
+  } else {
+    travelingRight = false;
+  }
+
+  if (!travelingRight == true && rend.position.x - 10 * dt >= 0) {
+    rend.position.x -= 10 * dt;
+  } else {
+    travelingRight = true;
+  }
   // std::cout << rend.position.x << endl;
   // system("cls");
-  // Snake::Rendering::Display::Render();
+  Snake::Rendering::Display::Render();
 }
 
 int main() {
@@ -22,7 +34,7 @@ int main() {
   Snake::Rendering::Display::Render();
 
 
-  Renderable &rend = Snake::Data::Renderables::testRenderable();
+  // Renderable &rend = Snake::Data::Renderables::testRenderable();
   // std::cout << rend.position.x << endl;
   // rend.position.x += 1;
   // std::cout << rend.position.x << endl;

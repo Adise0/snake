@@ -11,6 +11,7 @@ class Display {
 private:
   static char32_t screenBuffer[RESOLUTION_Y][RESOLUTION_X];
   static char32_t frameBuffer[RESOLUTION_Y][RESOLUTION_X];
+  static char32_t background[RESOLUTION_Y][RESOLUTION_X];
 
 public:
   static void Render();
