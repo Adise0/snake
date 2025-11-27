@@ -1,4 +1,5 @@
 #include "Sprite.h"
+#include "iostream"
 #include <string>
 #include <vector>
 
@@ -15,6 +16,8 @@ Sprite::Sprite(vector<u32string> drawing) : drawing(drawing) {
     if (line.length() > maxWidth) maxWidth = line.length();
   }
   this->width = maxWidth;
+
+  // cout << "From sprite width:" << to_string(width) << " height " << to_string(height) << endl;
 }
 } // namespace Rendering
 

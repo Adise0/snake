@@ -7,7 +7,7 @@ namespace Snake {
 namespace Data {
 class Sprites {
 public:
-  static Sprite testSprite;
+  static Sprite &testSprite();
 };
 } // namespace Data
 

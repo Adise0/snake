@@ -4,10 +4,10 @@
 namespace Snake {
 namespace Objects {
 struct Vector2 {
-  int x;
-  int y;
+  float x;
+  float y;
 
-  Vector2(int x, int y);
+  Vector2(float x, float y);
 
   static Vector2 Zero;
 };

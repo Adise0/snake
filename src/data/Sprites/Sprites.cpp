@@ -5,7 +5,12 @@
 
 namespace Snake {
 namespace Data {
-Sprite Sprites::testSprite(vector<u32string>{U"  ::::", U"::::::::", U"  ::::"});
+
+Sprite &Sprites::testSprite() {
+  static Sprite s({U"  ::::", U"::::::::", U"  ::::"});
+  return s;
+}
+
 } // namespace Data
 
 } // namespace Snake
