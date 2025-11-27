@@ -78,6 +78,13 @@ void Display::Init() {
   }
 
   HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
+
+  CONSOLE_CURSOR_INFO cursorInfo;
+  GetConsoleCursorInfo(h, &cursorInfo);
+
+  cursorInfo.bVisible = FALSE;
+  SetConsoleCursorInfo(h, &cursorInfo);
+
   for (size_t y = 0; y < RESOLUTION_Y; y++) {
     for (size_t x = 0; x < RESOLUTION_X; x++) {
       COORD consolePos = {static_cast<SHORT>(x), static_cast<SHORT>(y)};
