@@ -1,9 +1,13 @@
 #pragma once
+#include "../../objects/Vector2/Vector2.h"
 #include "../Sprite/Sprite.h"
+#include <queue>
 #include <string>
 
 #define RESOLUTION_X 69
 #define RESOLUTION_Y 45
+
+using namespace Snake::Objects;
 
 namespace Snake {
 namespace Rendering {
@@ -12,6 +16,7 @@ private:
   static wchar_t screenBuffer[RESOLUTION_X][RESOLUTION_Y];
   static wchar_t frameBuffer[RESOLUTION_X][RESOLUTION_Y];
   static wchar_t background[RESOLUTION_X][RESOLUTION_Y];
+  static queue<Vector2> dirtyChars;
 
 public:
   static void Render();

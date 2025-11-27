@@ -7,7 +7,7 @@ namespace Snake {
 namespace Data {
 
 Sprite &Sprites::testSprite() {
-  static Sprite s({U"  ::::", U"::::::::", U"  ::::"});
+  static Sprite s({U"    ::::    ", U"::::::::::::", U"    ::::    "});
   return s;
 }
 

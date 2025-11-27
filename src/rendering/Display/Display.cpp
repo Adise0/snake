@@ -7,6 +7,7 @@
 
 using namespace std;
 using namespace Snake::Data;
+using namespace Snake::Objects;
 
 namespace Snake {
 namespace Rendering {
@@ -15,6 +16,7 @@ namespace Rendering {
 wchar_t Display::screenBuffer[RESOLUTION_X][RESOLUTION_Y];
 wchar_t Display::frameBuffer[RESOLUTION_X][RESOLUTION_Y];
 wchar_t Display::background[RESOLUTION_X][RESOLUTION_Y];
+queue<Vector2> Display::dirtyChars = queue<Vector2>();
 
 // u32string Display::ToU32String(string value) {
 //   wstring_convert<codecvt_utf8<char32_t>, char32_t> conv;
@@ -89,8 +91,6 @@ void Display::Init() {
 }
 
 void Display::Render() {
-
-  Renderable &rend = Renderables::testRenderable();
   HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 
   for (size_t y = 0; y < RESOLUTION_Y; y++) {
@@ -99,17 +99,52 @@ void Display::Render() {
     }
   }
 
-  int updates = 0;
-  for (size_t y = 0; y < RESOLUTION_Y; y++) {
-    for (size_t x = 0; x < RESOLUTION_X; x++) {
-      COORD consolePos = {static_cast<SHORT>(x), static_cast<SHORT>(y)};
-      SetConsoleCursorPosition(h, consolePos);
+  Renderable &rend = Renderables::testRenderable();
+  for (size_t sy = 0; sy < rend.sprite.height; sy++) {
+    for (size_t sx = 0; sx < rend.sprite.width; sx++) {
+      int y = rend.position.y + sy;
+      int x = rend.position.x + sx;
 
-      wchar_t ch = background[x][y];
-      DWORD written;
-      WriteConsoleW(h, &ch, 1, &written, nullptr);
+      if (rend.sprite.drawing[sy][sx] == ' ') continue;
+
+      frameBuffer[x][y] = rend.sprite.drawing[sy][sx];
     }
   }
+
+  for (size_t y = 0; y < RESOLUTION_Y; y++) {
+    for (size_t x = 0; x < RESOLUTION_X; x++) {
+      if (screenBuffer[x][y] != frameBuffer[x][y]) {
+        if (frameBuffer[x][y] != ' ') screenBuffer[x][y] = frameBuffer[x][y];
+        dirtyChars.push(Vector2(x, y));
+      }
+    }
+  }
+
+
+  while (!dirtyChars.empty()) {
+    Vector2 pos = dirtyChars.front();
+    dirtyChars.pop();
+
+    COORD consolePos = {static_cast<SHORT>(pos.x), static_cast<SHORT>(pos.y)};
+    SetConsoleCursorPosition(h, consolePos);
+
+    wchar_t ch = screenBuffer[(int)pos.x][(int)pos.y];
+    DWORD written;
+    WriteConsoleW(h, &ch, 1, &written, nullptr);
+  }
+
+
+  // for (size_t y = 0; y < RESOLUTION_Y; y++) {
+  //   for (size_t x = 0; x < RESOLUTION_X; x++) {
+
+  //   }
+  // }
+
+  // for (size_t y = 0; y < RESOLUTION_Y; y++) {
+  //   for (size_t x = 0; x < RESOLUTION_X; x++) {
+  //     screenBuffer[x][y] = frameBuffer[x][y];
+  //   }
+  // }
 }
 } // namespace Rendering
 } // namespace Snake

@@ -9,7 +9,7 @@ namespace Data {
 // Renderable &Renderables::testRenderable = Renderable(Vector2::Zero, Sprites::testSprite);
 
 Renderable &Renderables::testRenderable() {
-  static Renderable r(Vector2(0, 0), Sprites::testSprite());
+  static Renderable r(Vector2(0, 10), Sprites::testSprite());
   return r;
 }
 } // namespace Data
