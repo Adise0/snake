@@ -2,8 +2,8 @@
 #include "../Sprite/Sprite.h"
 #include <string>
 
-#define RESOLUTION_X 68
-#define RESOLUTION_Y 60
+#define RESOLUTION_X 69
+#define RESOLUTION_Y 31
 
 namespace Snake {
 namespace Rendering {

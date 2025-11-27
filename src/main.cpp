@@ -5,6 +5,7 @@
 #include <windows.h>
 
 bool travelingRight = true;
+int frameCount = 0;
 
 void tick(float dt) {
   Renderable &rend = Snake::Data::Renderables::testRenderable();
@@ -24,6 +25,8 @@ void tick(float dt) {
   // std::cout << rend.position.x << endl;
   // system("cls");
   Snake::Rendering::Display::Render();
+  // cout << "Frame " << to_string(frameCount) << endl;
+  frameCount++;
 }
 
 int main() {
@@ -31,7 +34,8 @@ int main() {
   SetConsoleOutputCP(CP_UTF8);
   // std::cout << "ASD";
   Snake::Rendering::Display::Init();
-  Snake::Rendering::Display::Render();
+  // Snake::Rendering::Display::Render();
+  // Snake::Rendering::Display::Render();
 
 
   // Renderable &rend = Snake::Data::Renderables::testRenderable();
@@ -41,12 +45,17 @@ int main() {
   // return 0;
 
   auto last = std::chrono::high_resolution_clock::now();
-
+  float c = 1;
   while (true) {
+
     auto now = std::chrono::high_resolution_clock::now();
     float dt = std::chrono::duration<float>(now - last).count();
     last = now;
+    c -= dt;
+    // cout << c << endl;
+    // if (c > 0) continue;
+    // tick(dt);
 
-    tick(dt);
+    c = 1;
   }
 }
