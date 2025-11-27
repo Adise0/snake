@@ -9,7 +9,7 @@ namespace Snake {
 namespace Rendering {
 class Display {
 private:
-  static u32string screenBuffer[RESOLUTION_Y][RESOLUTION_X];
+  static char32_t screenBuffer[RESOLUTION_Y][RESOLUTION_X];
 
 public:
   static void Render();

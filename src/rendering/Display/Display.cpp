@@ -1,13 +1,16 @@
 #include "Display.h"
+#include "../../data/Renderables/Renderables.h"
 #include "iostream"
 #include <codecvt>
 
 using namespace std;
+using namespace Snake::Data;
+
 namespace Snake {
 namespace Rendering {
 
 
-u32string Display::screenBuffer[RESOLUTION_Y][RESOLUTION_X];
+char32_t Display::screenBuffer[RESOLUTION_Y][RESOLUTION_X];
 
 u32string Display::ToU32String(string value) {
   wstring_convert<codecvt_utf8<char32_t>, char32_t> conv;
@@ -23,15 +26,32 @@ void Display::Render() {
 
   for (size_t y = 0; y < RESOLUTION_Y; y++) {
     for (size_t x = 0; x < RESOLUTION_X; x++) {
-      Display::screenBuffer[y][x] = U"" + ToU32String(to_string(x)) + U" " + ToU32String(to_string(y));
+      Display::screenBuffer[x][y] = ' ';
     }
   }
 
-  for (size_t y = 0; y < RESOLUTION_Y; y++) {
-    for (size_t x = 0; x < RESOLUTION_X; x++) {
-      cout << ToString(screenBuffer[y][x]) << " ";
+  Renderable rend = Renderables::testRenderable;
+
+  for (size_t sy = 0; sy < rend.sprite.height; sy++) {
+    for (size_t sx = 0; sx < rend.sprite.width; sx++) {
+      int x = rend.position.x + sx;
+      int y = rend.position.y + sy;
+      screenBuffer[x][y] = rend.sprite.drawing[y][x];
     }
-    cout << endl;
+  }
+
+
+  wstring_convert<codecvt_utf8<char32_t>, char32_t> conv;
+  for (size_t y = 0; y < RESOLUTION_Y; y++) {
+    u32string line32;
+    line32.reserve(RESOLUTION_X);
+    for (size_t x = 0; x < RESOLUTION_X; x++) {
+      line32.push_back(screenBuffer[x][y]);
+    }
+
+    // Convert whole line to UTF-8 and print
+    string line8 = conv.to_bytes(line32);
+    cout << line8 << '\n';
   }
 
 
