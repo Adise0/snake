@@ -1,5 +1,10 @@
 #include "iostream"
+#include <windows.h>
 
 
+int main() {
 
-int main() { return 0; }
+  SetConsoleOutputCP(CP_UTF8);
+
+  return 0;
+}
