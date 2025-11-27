@@ -31,31 +31,32 @@ void tick(float dt) {
 
 int main() {
 
-  SetConsoleOutputCP(CP_UTF8);
-  // std::cout << "ASD";
+
+
+  // // std::cout << "ASD";
   Snake::Rendering::Display::Init();
-  // Snake::Rendering::Display::Render();
-  // Snake::Rendering::Display::Render();
+  Snake::Rendering::Display::Render();
+  // // Snake::Rendering::Display::Render();
 
 
-  // Renderable &rend = Snake::Data::Renderables::testRenderable();
-  // std::cout << rend.position.x << endl;
-  // rend.position.x += 1;
-  // std::cout << rend.position.x << endl;
-  // return 0;
+  // // Renderable &rend = Snake::Data::Renderables::testRenderable();
+  // // std::cout << rend.position.x << endl;
+  // // rend.position.x += 1;
+  // // std::cout << rend.position.x << endl;
+  // // return 0;
 
-  auto last = std::chrono::high_resolution_clock::now();
-  float c = 1;
-  while (true) {
+  // auto last = std::chrono::high_resolution_clock::now();
+  // float c = 1;
+  // while (true) {
 
-    auto now = std::chrono::high_resolution_clock::now();
-    float dt = std::chrono::duration<float>(now - last).count();
-    last = now;
-    c -= dt;
-    // cout << c << endl;
-    // if (c > 0) continue;
-    // tick(dt);
+  //   auto now = std::chrono::high_resolution_clock::now();
+  //   float dt = std::chrono::duration<float>(now - last).count();
+  //   last = now;
+  //   c -= dt;
+  //   // cout << c << endl;
+  //   // if (c > 0) continue;
+  //   // tick(dt);
 
-    c = 1;
-  }
+  //   c = 1;
+  // }
 }

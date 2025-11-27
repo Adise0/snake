@@ -12,36 +12,30 @@ namespace Snake {
 namespace Rendering {
 
 
-char32_t Display::screenBuffer[RESOLUTION_Y][RESOLUTION_X];
-char32_t Display::frameBuffer[RESOLUTION_Y][RESOLUTION_X];
-char32_t Display::background[RESOLUTION_Y][RESOLUTION_X];
+wchar_t Display::screenBuffer[RESOLUTION_X][RESOLUTION_Y];
+wchar_t Display::frameBuffer[RESOLUTION_X][RESOLUTION_Y];
+wchar_t Display::background[RESOLUTION_X][RESOLUTION_Y];
 
-u32string Display::ToU32String(string value) {
-  wstring_convert<codecvt_utf8<char32_t>, char32_t> conv;
-  return conv.from_bytes(value);
-}
+// u32string Display::ToU32String(string value) {
+//   wstring_convert<codecvt_utf8<char32_t>, char32_t> conv;
+//   return conv.from_bytes(value);
+// }
 
-string Display::ToString(u32string value) {
-  wstring_convert<codecvt_utf8<char32_t>, char32_t> conv;
-  return conv.to_bytes(value);
-}
+// string Display::ToString(u32string value) {
+//   wstring_convert<codecvt_utf8<char32_t>, char32_t> conv;
+//   return conv.to_bytes(value);
+// }
 
 void Display::Init() {
   for (size_t y = 0; y < RESOLUTION_Y; y++) {
     for (size_t x = 0; x < RESOLUTION_X; x++) {
       screenBuffer[x][y] = ' ';
-
-      // if (x == 0) {
-      //   if (y == 0) background[x][y] = U'\u250C';                     // ┌
-      //   else if (y == RESOLUTION_Y - 1) background[x][y] = U'\u2514'; // └
-      //   else if (y % 2 == 0) background[x][y] = U'\u2502';            // │
-      //   else background[x][y] = U'\u251C';                            // ├
-      // } else background[x][y] = U' ';
     }
   }
+
   for (int y = 0; y < RESOLUTION_Y; ++y) {
     for (int x = 0; x < RESOLUTION_X; ++x) {
-      char32_t ch;
+      wchar_t ch;
 
       bool top = (y == 0);
       bool bottom = (y == RESOLUTION_Y - 1);
@@ -76,84 +70,46 @@ void Display::Init() {
       } else {
         ch = U'#'; // inside cell
       }
-      frameBuffer[x][y] = ch;
       background[x][y] = ch;
+      frameBuffer[x][y] = ch;
     }
   }
 
-
-  cout << "Hello! from init!" << endl;
-  wstring_convert<codecvt_utf8<char32_t>, char32_t> conv;
+  HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
   for (size_t y = 0; y < RESOLUTION_Y; y++) {
-    u32string line32;
-    line32.reserve(RESOLUTION_X);
     for (size_t x = 0; x < RESOLUTION_X; x++) {
-      line32.push_back(frameBuffer[x][y]);
-    }
+      COORD consolePos = {static_cast<SHORT>(x), static_cast<SHORT>(y)};
+      SetConsoleCursorPosition(h, consolePos);
 
-    // Convert whole line to UTF-8 and print
-    string line8 = conv.to_bytes(line32);
-    cout << line8 << '\n';
+      wchar_t ch = static_cast<wchar_t>(background[x][y]);
+      DWORD written;
+      WriteConsoleW(h, &ch, 1, &written, nullptr);
+    }
   }
 }
 
 void Display::Render() {
 
-  system("cls");
   Renderable &rend = Renderables::testRenderable();
   HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-  wstring_convert<codecvt_utf8<char32_t>, char32_t> conv;
-  // cout << "From display x" << to_string(rend.position.x) << endl;
-  // cout << "From display y" << to_string(rend.position.y) << endl;
-
-  // for (size_t sy = 0; sy < rend.sprite.height; sy++) {
-  //   for (size_t sx = 0; sx < rend.sprite.width - 1; sx++) {
-  //     int x = rend.position.x + sx;
-  //     int y = rend.position.y + sy;
-  //     frameBuffer[x][y] = rend.sprite.drawing[sy][sx];
-  //   }
-  // }
-
-  queue<Vector2> dirtyQueue;
 
   for (size_t y = 0; y < RESOLUTION_Y; y++) {
     for (size_t x = 0; x < RESOLUTION_X; x++) {
-      if (screenBuffer[x][y] != frameBuffer[x][y]) {
-        // cout << conv.to_bytes(screenBuffer[x][y]) << " <-> " << conv.to_bytes(frameBuffer[x][y]) << endl;
-        dirtyQueue.push(Vector2(x, y));
-      };
-    }
-  }
-
-
-
-  // if (dirtyQueue.size() != 0) cout << "Dirty count: " << dirtyQueue.size() << endl;
-
-  COORD messagePos = {static_cast<SHORT>(0), static_cast<SHORT>(0)};
-  SetConsoleCursorPosition(h, messagePos);
-  cout << "Hello! " << dirtyQueue.size() << endl;
-
-  while (!dirtyQueue.empty()) {
-    Vector2 pos = dirtyQueue.front();
-    dirtyQueue.pop();
-
-    // cout << pos.x << "," << pos.y << endl;
-    COORD consolePos = {static_cast<SHORT>(pos.x), static_cast<SHORT>(1 + pos.y)};
-    SetConsoleCursorPosition(h, consolePos);
-    string character = conv.to_bytes(frameBuffer[static_cast<size_t>(pos.x)][static_cast<size_t>(pos.y)]);
-    cout << character;
-  }
-
-
-  for (size_t y = 0; y < RESOLUTION_Y; y++) {
-    for (size_t x = 0; x < RESOLUTION_X; x++) {
-      screenBuffer[x][y] = frameBuffer[x][y];
       frameBuffer[x][y] = background[x][y];
     }
   }
 
+  int updates = 0;
+  for (size_t y = 0; y < RESOLUTION_Y; y++) {
+    for (size_t x = 0; x < RESOLUTION_X; x++) {
+      COORD consolePos = {static_cast<SHORT>(x), static_cast<SHORT>(y)};
+      SetConsoleCursorPosition(h, consolePos);
 
-  // TODO: Do stuff here
+      wchar_t ch = background[x][y];
+      DWORD written;
+      WriteConsoleW(h, &ch, 1, &written, nullptr);
+    }
+  }
 }
 } // namespace Rendering
 } // namespace Snake
