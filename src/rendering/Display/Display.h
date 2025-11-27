@@ -12,7 +12,9 @@ private:
   static u32string screenBuffer[RESOLUTION_Y][RESOLUTION_X];
 
 public:
-  void Render();
+  static void Render();
+  static string ToString(u32string value);
+  static u32string ToU32String(string value);
 };
 } // namespace Rendering
 } // namespace Snake
