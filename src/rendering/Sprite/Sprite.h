@@ -10,10 +10,11 @@ namespace Snake {
 namespace Rendering {
 class Sprite {
 public:
+  short id;
   vector<u32string> drawing;
   short height;
   short width;
-  Sprite(vector<u32string> drawing);
+  Sprite(short id, vector<u32string> drawing);
 };
 } // namespace Rendering
 } // namespace Snake

@@ -10,13 +10,9 @@ namespace Objects {
 class Renderable {
 public:
   Vector2 position;
-  Sprite &sprite;
+  Sprite *sprite;
 
-  // Renderable();
-  // Renderable(Sprite sprite);
-  Renderable(Vector2 position, Sprite &sprite);
-
-  // Renderable(Vector2 position, Sprite sprite);
+  Renderable(Vector2 position, Sprite *sprite);
 };
 } // namespace Objects
 } // namespace Snake

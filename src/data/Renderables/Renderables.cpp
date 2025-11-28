@@ -13,7 +13,7 @@ namespace Data {
 //   return r;
 // }
 
-Renderable Renderables::snakeHead(Vector2(0, 10), Sprites::head_right);
+Renderable Renderables::snakeHead(Vector2(0, 10), Sprites::head_left);
 } // namespace Data
 
 } // namespace Snake

@@ -8,7 +8,7 @@ using namespace std;
 namespace Snake {
 namespace Rendering {
 
-Sprite::Sprite(vector<u32string> drawing) : drawing(drawing) {
+Sprite::Sprite(short id, vector<u32string> drawing) : id(id), drawing(drawing) {
   this->height = drawing.size();
 
   short maxWidth = 0;

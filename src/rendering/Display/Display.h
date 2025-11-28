@@ -4,8 +4,8 @@
 #include <queue>
 #include <string>
 
-#define RESOLUTION_X 69
-#define RESOLUTION_Y 45
+#define RESOLUTION_X 86
+#define RESOLUTION_Y 31
 
 using namespace Snake::Objects;
 

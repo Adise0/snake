@@ -45,7 +45,7 @@ void Display::Init() {
       bool right = (x == RESOLUTION_X - 1);
 
       bool gridRow = (y % 2 == 0) || y == RESOLUTION_Y - 1;
-      bool gridCol = (x % 4 == 0) || x == RESOLUTION_X - 1;
+      bool gridCol = (x % 5 == 0) || x == RESOLUTION_X - 1;
 
       if (top && left) {
         ch = U'\u250C'; // ┌
@@ -77,6 +77,7 @@ void Display::Init() {
     }
   }
 
+  SetConsoleCP(CP_UTF8);
   HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
 
   CONSOLE_CURSOR_INFO cursorInfo;
@@ -107,14 +108,18 @@ void Display::Render() {
   }
 
   Renderable &rend = Renderables::snakeHead;
-  for (size_t sy = 0; sy < rend.sprite.height; sy++) {
-    for (size_t sx = 0; sx < rend.sprite.width; sx++) {
+  for (size_t sy = 0; sy < rend.sprite->height; sy++) {
+    for (size_t sx = 0; sx < rend.sprite->width; sx++) {
       int y = rend.position.y + sy;
       int x = rend.position.x + sx;
 
-      if (rend.sprite.drawing[sy][sx] == ' ') continue;
+      if (rend.sprite->drawing[sy][sx] == ' ') continue;
+      if (rend.sprite->drawing[sy][sx] == 'b') {
+        frameBuffer[x][y] = ' ';
+        continue;
+      }
 
-      frameBuffer[x][y] = rend.sprite.drawing[sy][sx];
+      frameBuffer[x][y] = rend.sprite->drawing[sy][sx];
     }
   }
 
