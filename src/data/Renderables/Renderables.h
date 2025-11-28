@@ -8,7 +8,7 @@ namespace Snake {
 namespace Data {
 class Renderables {
 public:
-  static Renderable &testRenderable();
+  static Renderable snakeHead;
 }; // namespace Data
 } // namespace Data
 } // namespace Snake

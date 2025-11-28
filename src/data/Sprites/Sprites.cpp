@@ -6,10 +6,10 @@
 namespace Snake {
 namespace Data {
 
-Sprite &Sprites::testSprite() {
-  static Sprite s({U"    ::::    ", U"::::::::::::", U"    ::::    "});
-  return s;
-}
+Sprite Sprites::head_right = Sprite({U"()>   ", U"####)>", U"()>   "});
+Sprite Sprites::head_left = Sprite({U"   <()", U"<(####", U"   <()"});
+Sprite Sprites::head_up = Sprite({U"   <()", U"<(####", U"   <()"});
+Sprite Sprites::head_down = Sprite({U"   <()", U"<(####", U"   <()"});
 
 } // namespace Data
 

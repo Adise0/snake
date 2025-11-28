@@ -70,7 +70,7 @@ void Display::Init() {
       } else if (gridCol) {
         ch = U'\u2502'; // │ (vertical)
       } else {
-        ch = U'#'; // inside cell
+        ch = U' '; // inside cell
       }
       background[x][y] = ch;
       frameBuffer[x][y] = ch;
@@ -106,7 +106,7 @@ void Display::Render() {
     }
   }
 
-  Renderable &rend = Renderables::testRenderable();
+  Renderable &rend = Renderables::snakeHead;
   for (size_t sy = 0; sy < rend.sprite.height; sy++) {
     for (size_t sx = 0; sx < rend.sprite.width; sx++) {
       int y = rend.position.y + sy;
@@ -121,7 +121,7 @@ void Display::Render() {
   for (size_t y = 0; y < RESOLUTION_Y; y++) {
     for (size_t x = 0; x < RESOLUTION_X; x++) {
       if (screenBuffer[x][y] != frameBuffer[x][y]) {
-        if (frameBuffer[x][y] != ' ') screenBuffer[x][y] = frameBuffer[x][y];
+        screenBuffer[x][y] = frameBuffer[x][y];
         dirtyChars.push(Vector2(x, y));
       }
     }

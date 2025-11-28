@@ -7,7 +7,10 @@ namespace Snake {
 namespace Data {
 class Sprites {
 public:
-  static Sprite &testSprite();
+  static Sprite head_right;
+  static Sprite head_left;
+  static Sprite head_up;
+  static Sprite head_down;
 };
 } // namespace Data
 
