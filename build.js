@@ -65,7 +65,7 @@ filesToCompile = filesToCompile.filter((filePath) => !filePath.endsWith(".h"));
 
 if (filesToCompile.length != 0) {
   execSync(
-    `cl.exe /Zi /Od /EHsc /nologo /Fobuild/objects/ /Fdbuild/compiler.pdb ${filesToCompile.join(
+    `cl.exe /Zi /Od /EHsc /nologo /I"lib/include" /Fobuild/objects/ /Fdbuild/compiler.pdb ${filesToCompile.join(
       " "
     )} /c`,
     {
@@ -75,7 +75,9 @@ if (filesToCompile.length != 0) {
   );
 
   execSync(
-    `link.exe /OUT:"build/app.exe" /DEBUG /PDB:"build/app.pdb" build/objects/*.obj`,
+    `link.exe /OUT:"build/app.exe" /DEBUG /PDB:"build/app.pdb" build/objects/*.obj SDL3.lib /LIBPATH:"lib/SDL3"
+     
+     `,
     {
       stdio: "inherit",
       shell: true,
