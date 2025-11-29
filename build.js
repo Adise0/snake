@@ -3,9 +3,9 @@ import path from "path";
 import crypto from "crypto";
 import { execSync } from "child_process";
 
-const cachePath = "./build/cache/app.cache";
+const cachePath = "./build/cache/snake.cache";
 const srcPath = "./src";
-const appPath = "./build/app.exe";
+const appPath = "./build/snake.exe";
 
 const getFileHash = (filePath) => {
   const fileBuffer = fs.readFileSync(filePath);
@@ -75,9 +75,7 @@ if (filesToCompile.length != 0) {
   );
 
   execSync(
-    `link.exe /OUT:"build/app.exe" /DEBUG /PDB:"build/app.pdb" build/objects/*.obj SDL3.lib /LIBPATH:"lib/SDL3"
-     
-     `,
+    `link.exe /OUT:"build/snake.exe" /DEBUG /PDB:"build/snake.pdb" build/objects/*.obj SDL3.lib /LIBPATH:"lib/SDL3" /SUBSYSTEM:WINDOWS`,
     {
       stdio: "inherit",
       shell: true,
