@@ -10,7 +10,6 @@ Sprite::Sprite(vector<u32string> characters)
 }
 
 
-
 bool Sprite::IsSpriteValid(vector<u32string> characters) {
   short width = characters[0].length();
 

@@ -3,24 +3,23 @@ namespace Snake::Data {
 class Consts {
 public:
   /// @brief The map horizontal size (in cells)
-  static const int MAP_X;
+  static constexpr int MAP_X = 17;
   /// @brief The map vertical size (in cells)
-  static const int MAP_Y;
+  static constexpr int MAP_Y = 15;
 
   /// @brief The horizontal size of each cell (in characters)
-  static const int CELL_RESOLUTION_X;
-
+  static constexpr int CELL_RESOLUTION_X = 5;
   /// @brief The vertical size of each cell (in characters)
-  static const int CELL_RESOLUTION_Y;
+  static constexpr int CELL_RESOLUTION_Y = 2;
 
   /// @brief The horizontal size of a Conssolas character (in pixels)
-  static const int CHAR_RESOLUTION_X;
+  static constexpr int CHAR_RESOLUTION_X = 9;
   /// @brief The vertical size of a Conssolas character (in pixels)
-  static const int CHAR_RESOLUTION_Y;
+  static constexpr int CHAR_RESOLUTION_Y = 16;
 
   /// @brief The horizontal size of the whole map (in characters)
-  static const int RESOLUTION_X;
+  static constexpr int RESOLUTION_X = MAP_X * CELL_RESOLUTION_X + 1;
   /// @brief The verrtical size of the whole map (in characters)
-  static const int RESOLUTION_Y;
+  static constexpr int RESOLUTION_Y = MAP_Y * CELL_RESOLUTION_Y + 1;
 };
 } // namespace Snake::Data
