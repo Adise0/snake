@@ -29,21 +29,8 @@ void Config::SetConsoleSize() {
 
 
   if (owner == NULL) {
-    // RECT rc = {0, 0, width, height};
-    // AdjustWindowRectEx(&rc, GetWindowLong(hwnd, GWL_STYLE), FALSE, GetWindowLong(hwnd, GWL_EXSTYLE));
-
-    // int finalW = rc.right - rc.left;
-    // int finalH = rc.bottom - rc.top;
-
     SetWindowPos(hwnd, nullptr, 0, 0, 100, height, SWP_NOZORDER | SWP_NOMOVE);
   } else {
-
-    // RECT rc = {0, 0, width, height};
-    // AdjustWindowRectEx(&rc, GetWindowLong(owner, GWL_STYLE), FALSE, GetWindowLong(owner, GWL_EXSTYLE));
-
-    // int finalW = rc.right - rc.left;
-    // int finalH = rc.bottom - rc.top;
-
     SetWindowPos(owner, nullptr, 0, 0, width, height, SWP_NOZORDER | SWP_NOMOVE);
   }
 }
