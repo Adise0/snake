@@ -1,0 +1,37 @@
+#include "Config.h"
+#include "../../data/Consts/Consts.h"
+#include <Windows.h>
+#include <iostream>
+
+using namespace Snake::Data;
+
+namespace Snake::Rendering {
+
+void Config::ConfigureConsole() {
+  SetConsoleEncoding();
+  SetConsoleSize();
+}
+
+void Config::SetConsoleEncoding() {
+  SetConsoleCP(CP_UTF8);
+  SetConsoleOutputCP(CP_UTF8);
+}
+
+void Config::SetConsoleSize() {
+
+  HWND hwnd = GetConsoleWindow();
+  Sleep(10);
+  HWND owner = GetWindow(hwnd, GW_OWNER);
+
+
+  int width = Consts::RESOLUTION_X * Consts::CHAR_RESOLUTION_X;
+  int height = Consts::RESOLUTION_Y * Consts::CHAR_RESOLUTION_Y;
+
+
+  if (owner == NULL) {
+    SetWindowPos(hwnd, nullptr, 0, 0, 100, height, SWP_NOZORDER | SWP_NOMOVE);
+  } else {
+    SetWindowPos(owner, nullptr, 0, 0, width, height, SWP_NOZORDER | SWP_NOMOVE);
+  }
+}
+} // namespace Snake::Rendering
