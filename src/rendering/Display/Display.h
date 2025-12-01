@@ -24,6 +24,9 @@ private:
   static std::queue<Vector2> dirtyChars;
 
 private:
+  /// @brief Hides the console cursor
+  static void HideCursor();
+
   /// @brief Initializes the background buffer
   static void InitializeBackground();
 
