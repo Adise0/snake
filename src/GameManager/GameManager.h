@@ -1,7 +1,7 @@
 #include "../data/CellType/CellType.h"
 #include "../data/Consts/Consts.h"
 #include "../objects/Vector2/Vector2.h"
-#include <queue>
+#include <deque>
 
 using namespace Snake::Data;
 using namespace Snake::Objects;
@@ -12,7 +12,7 @@ private:
   /// @brief The cell grid
   static CellType cells[Consts::MAP_X][Consts::MAP_Y];
   /// @brief The snake queue
-  static std::queue<Vector2> snake;
+  static std::deque<Vector2> snake;
 
 
 public:
@@ -38,5 +38,9 @@ private:
   /// @param cell The cell to check
   /// @return Whether it's safe
   static bool IsCellSafe(Vector2 cell);
+
+
+  /// @brief Spawns the snake in the center of the grid
+  static void SpawnSnake();
 };
 } // namespace Snake

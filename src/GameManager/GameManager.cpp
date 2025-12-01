@@ -6,13 +6,14 @@ using namespace Snake;
 using namespace Rendering;
 
 CellType GameManager::cells[Consts::MAP_X][Consts::MAP_Y];
-std::queue<Vector2> GameManager::snake;
+std::deque<Vector2> GameManager::snake;
 
 void GameManager::Initialize() {
   // #region Initialize
   Display::Initialize();
   InitializeGrid();
 
+  SpawnSnake();
 
   Run();
   // #endregion
@@ -40,6 +41,17 @@ void GameManager::Run() {
 
     Tick(deltaTime);
   }
+  // #endregion
+}
+
+
+void GameManager::SpawnSnake() {
+  // #region SpawnSnake
+  short x = Consts::MAP_X / 2;
+  short y = Consts::MAP_Y / 2;
+
+  cells[x][y] = CellType::Snake;
+  snake.push_front(Vector2(x, y));
   // #endregion
 }
 
