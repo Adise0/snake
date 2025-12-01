@@ -1,11 +1,23 @@
 #include "iostream"
+#include "objects/SpriteRenderer/SpriteRenderer.h"
 #include "rendering/Config/Config.h"
+#include "rendering/Display/Display.h"
 
-using namespace Snake;
+
+using namespace Snake::Rendering;
 
 int main() {
-  Rendering::Config::ConfigureConsole();
+  Config::ConfigureConsole();
+  Display::Initialize();
 
-  system("pause");
+  Sprite sprite = Sprite(std::vector<std::u32string>{U"  ##  ", U"######", U"##  ##"});
+  SpriteRenderer renderer = SpriteRenderer(Vector2(10, 10), &sprite);
+
+  Display::Tick();
+  Sleep(1000);
+  Display::Tick();
+
+
+
   return 0;
 }
