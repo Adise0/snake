@@ -16,5 +16,6 @@ public:
   /// @param x The X coordenate
   /// @param y The Y coordenate
   Vector2(float x, float y);
+  Vector2();
 };
 } // namespace Snake::Objects

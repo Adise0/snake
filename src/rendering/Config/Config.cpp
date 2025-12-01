@@ -8,6 +8,8 @@ using namespace Snake::Data;
 namespace Snake::Rendering {
 
 void Config::ConfigureConsole() {
+  std::srand(time(0));
+
   SetConsoleEncoding();
   SetConsoleSize();
 }

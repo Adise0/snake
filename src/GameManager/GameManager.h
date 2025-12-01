@@ -3,6 +3,7 @@
 #include "../objects/SpriteRenderer/SpriteRenderer.h"
 #include "../objects/Vector2/Vector2.h"
 #include <deque>
+#include <optional>
 #include <vector>
 
 using namespace Snake::Data;
@@ -13,9 +14,14 @@ class GameManager {
 private:
   /// @brief The cell grid
   static CellType cells[Consts::MAP_X][Consts::MAP_Y];
+
+  /// @brief The current apple position
+  static std::optional<Vector2> applePosition;
   /// @brief The snake queue
   static std::deque<Vector2> snake;
   static std::vector<SpriteRenderer *> snakeRenderers;
+
+  static SpriteRenderer &appleRenderer;
 
 
 public:
