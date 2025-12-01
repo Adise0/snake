@@ -14,6 +14,9 @@ int main() {
   SpriteRenderer renderer = SpriteRenderer(Vector2(10, 10), &sprite);
 
   Display::Tick();
+  Sleep(1000);
+  Display::Tick();
+
 
 
   return 0;

@@ -118,6 +118,7 @@ void Display::DrawSprites() {
 
     COORD consolePos = {0, 0};
     SetConsoleCursorPosition(consoleHandle, consolePos);
+    std::cout << "\33[2K";
     std::cout << "Width: " << width << " Height: " << height << " Expected: " << width * height
               << std::endl;
 
@@ -162,6 +163,7 @@ void Display::Print() {
   // #region Print
   COORD consolePos = {0, 1};
   SetConsoleCursorPosition(consoleHandle, consolePos);
+  std::cout << "\33[2K";
   std::cout << "Chars to re-render: " << dirtyChars.size() << std::endl;
 
   while (!dirtyChars.empty()) {
