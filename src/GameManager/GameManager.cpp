@@ -7,6 +7,7 @@ using namespace Rendering;
 
 CellType GameManager::cells[Consts::MAP_X][Consts::MAP_Y];
 std::deque<Vector2> GameManager::snake;
+std::vector<SpriteRenderer *> GameManager::snakeRenderers;
 
 void GameManager::Initialize() {
   // #region Initialize

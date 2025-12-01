@@ -1,7 +1,9 @@
 #include "../data/CellType/CellType.h"
 #include "../data/Consts/Consts.h"
+#include "../objects/SpriteRenderer/SpriteRenderer.h"
 #include "../objects/Vector2/Vector2.h"
 #include <deque>
+#include <vector>
 
 using namespace Snake::Data;
 using namespace Snake::Objects;
@@ -13,6 +15,7 @@ private:
   static CellType cells[Consts::MAP_X][Consts::MAP_Y];
   /// @brief The snake queue
   static std::deque<Vector2> snake;
+  static std::vector<SpriteRenderer *> snakeRenderers;
 
 
 public:
