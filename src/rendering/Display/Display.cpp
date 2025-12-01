@@ -5,16 +5,17 @@
 #include <iostream>
 
 
+
 using namespace Snake::Data;
 using namespace Snake::Objects;
-using namespace std;
+
 namespace Snake::Rendering {
 // #region Data
 HANDLE Display::consoleHandle;
 char32_t Display::background[Consts::RESOLUTION_X][Consts::RESOLUTION_Y];
 char32_t Display::frameBuffer[Consts::RESOLUTION_X][Consts::RESOLUTION_Y];
 char32_t Display::screenBuffer[Consts::RESOLUTION_X][Consts::RESOLUTION_Y];
-queue<Vector2> Display::dirtyChars;
+std::queue<Vector2> Display::dirtyChars;
 // #endregion
 
 void Display::Initialize() {
@@ -115,22 +116,28 @@ void Display::DrawSprites() {
     int positionY = spriteRenderer->position.y;
 
 
+    COORD consolePos = {0, 0};
+    SetConsoleCursorPosition(consoleHandle, consolePos);
+    std::cout << "Width: " << width << " Height: " << height << " Expected: " << width * height
+              << std::endl;
 
-    vector<u32string> &characters = spriteRenderer->sprite->characters;
+    std::vector<std::u32string> &characters = spriteRenderer->sprite->characters;
 
     for (size_t spriteY = 0; spriteY < height; spriteY++) {
       for (size_t spriteX = 0; spriteX < width; spriteX++) {
-        if (characters[spriteX][spriteY] == ' ') continue;
+
+        if (characters[spriteY][spriteX] == ' ') continue;
 
         int x = positionX + spriteX;
         int y = positionY + spriteY;
 
-        if (characters[spriteX][spriteY] == 'b') {
+
+        if (characters[spriteY][spriteX] == 'b') {
           frameBuffer[x][y] = ' ';
           continue;
         }
 
-        frameBuffer[x][y] = characters[spriteX][spriteY];
+        frameBuffer[x][y] = characters[spriteY][spriteX];
       }
     }
   }
@@ -153,6 +160,10 @@ void Display::ComputeDirtyChars() {
 
 void Display::Print() {
   // #region Print
+  COORD consolePos = {0, 1};
+  SetConsoleCursorPosition(consoleHandle, consolePos);
+  std::cout << "Chars to re-render: " << dirtyChars.size() << std::endl;
+
   while (!dirtyChars.empty()) {
     Vector2 pos = dirtyChars.front();
     dirtyChars.pop();
@@ -160,12 +171,12 @@ void Display::Print() {
     short x = pos.x;
     short y = pos.y;
 
-    COORD consolePos = {x, y};
+    COORD consolePos = {x, y + 2};
     SetConsoleCursorPosition(consoleHandle, consolePos);
 
-    wstring_convert<codecvt_utf8<char32_t>, char32_t> conv;
-    string converted = conv.to_bytes(screenBuffer[x][y]);
-    cout << converted;
+    std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
+    std::string converted = conv.to_bytes(screenBuffer[x][y]);
+    std::cout << converted;
   }
   // #endregion
 }

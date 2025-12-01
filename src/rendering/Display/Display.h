@@ -4,7 +4,7 @@
 #include <queue>
 #include <windows.h>
 
-using namespace std;
+
 using namespace Snake::Data;
 using namespace Snake::Objects;
 
@@ -21,7 +21,7 @@ private:
   /// @brief The current screen buffer (holds the rendered and to render values)
   static char32_t screenBuffer[Consts::RESOLUTION_X][Consts::RESOLUTION_Y];
   /// @brief The queue of scren positions to re-draw
-  static queue<Vector2> dirtyChars;
+  static std::queue<Vector2> dirtyChars;
 
 private:
   /// @brief Initializes the background buffer

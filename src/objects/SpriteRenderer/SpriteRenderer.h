@@ -1,15 +1,13 @@
 #pragma once
 #include "../Sprite/Sprite.h"
 #include "../Vector2/Vector2.h"
-#include <vector>
 
-using namespace std;
 
 namespace Snake::Objects {
 class SpriteRenderer {
 public:
   /// @brief The store of all sprite renderers
-  static vector<SpriteRenderer *> spriteRenderers;
+  static std::vector<SpriteRenderer *> spriteRenderers;
   /// @brief Registers the given sprite into the global store
   /// @param spriteRenderer The sprite renderer to register
   void RegisterSpriteRenderer(SpriteRenderer *spriteRenderer);

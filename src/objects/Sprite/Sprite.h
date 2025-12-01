@@ -3,9 +3,6 @@
 #include <string>
 #include <vector>
 
-
-using namespace std;
-
 namespace Snake::Objects {
 
 class Sprite {
@@ -20,12 +17,12 @@ private:
 
   /// @brief Gets the srpite rect
   /// @return The sprite rect
-  static Vector2 GetRect(vector<u32string> characters);
+  static Vector2 GetRect(std::vector<std::u32string> characters);
 
 
   /// @brief Checks if the sprite is valid
   /// @return Whether the sprite is valid
-  static bool IsSpriteValid(vector<u32string> characters);
+  static bool IsSpriteValid(std::vector<std::u32string> characters);
 
 private:
   /// @brief The id of the sprite
@@ -35,10 +32,10 @@ public:
   /// @brief The rect (size) of the sprite
   Vector2 rect;
   /// @brief The characters of the sprite
-  vector<u32string> characters;
+  std::vector<std::u32string> characters;
 
   /// @brief Creates a new sprite
   /// @param characters The characters of the sprite
-  Sprite(vector<u32string> characters);
+  Sprite(std::vector<std::u32string> characters);
 };
 } // namespace Snake::Objects
