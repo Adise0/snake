@@ -20,9 +20,10 @@ void Config::SetConsoleEncoding() {
 void Config::SetConsoleSize() {
 
   HWND hwnd = GetConsoleWindow();
-  Sleep(10);
+  Sleep(20);
   HWND owner = GetWindow(hwnd, GW_OWNER);
 
+  //TOODO: Grab actual font values!
 
   int width = Consts::RESOLUTION_X * Consts::CHAR_RESOLUTION_X;
   int height = Consts::RESOLUTION_Y * Consts::CHAR_RESOLUTION_Y;

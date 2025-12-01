@@ -2,6 +2,7 @@
 #include "../../data/Consts/Consts.h"
 #include "../../objects/Vector2/Vector2.h"
 #include <queue>
+#include <windows.h>
 
 using namespace std;
 using namespace Snake::Data;
@@ -11,14 +12,20 @@ namespace Snake::Rendering {
 
 class Display {
 private:
+  /// @brief The console handle
+  static HANDLE consoleHandle;
   /// @brief The background static buffer
   static char32_t background[Consts::RESOLUTION_X][Consts::RESOLUTION_Y];
   /// @brief The current frame buffer (memory only)
   static char32_t frameBuffer[Consts::RESOLUTION_X][Consts::RESOLUTION_Y];
   /// @brief The current screen buffer (holds the rendered and to render values)
-  static char32_t screennBuffer[Consts::RESOLUTION_X][Consts::RESOLUTION_Y];
+  static char32_t screenBuffer[Consts::RESOLUTION_X][Consts::RESOLUTION_Y];
   /// @brief The queue of scren positions to re-draw
   static queue<Vector2> dirtyChars;
+
+private:
+  /// @brief Initializes the background buffer
+  static void InitializeBackground();
 
   /// @brief Initializes the screen buffers
   static void InitializeBuffers();
@@ -34,5 +41,11 @@ private:
 
   /// @brief Prints the current dirty chars
   static void Print();
+
+
+public: /// @brief Initializes the renderer
+  static void Initialize();
+  /// @brief Ticks the display
+  static void Tick();
 };
 } // namespace Snake::Rendering
