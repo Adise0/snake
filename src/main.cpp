@@ -1,6 +1,5 @@
 #include "GameManager/GameManager.h"
 #include "iostream"
-#include "objects/SpriteRenderer/SpriteRenderer.h"
 #include "rendering/Config/Config.h"
 
 

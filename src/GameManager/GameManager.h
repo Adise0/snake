@@ -19,9 +19,9 @@ private:
   static std::optional<Vector2> applePosition;
   /// @brief The snake queue
   static std::deque<Vector2> snake;
-  static std::vector<SpriteRenderer *> snakeRenderers;
+  static std::deque<SpriteRenderer> snakeRenderers;
 
-  static SpriteRenderer &appleRenderer;
+  static SpriteRenderer appleRenderer;
 
 
 public:

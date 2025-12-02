@@ -12,8 +12,6 @@ namespace Snake::Rendering {
 
 class Display {
 private:
-  /// @brief The console handle
-  static HANDLE consoleHandle;
   /// @brief The background static buffer
   static char32_t background[Consts::RESOLUTION_X][Consts::RESOLUTION_Y];
   /// @brief The current frame buffer (memory only)
@@ -22,6 +20,10 @@ private:
   static char32_t screenBuffer[Consts::RESOLUTION_X][Consts::RESOLUTION_Y];
   /// @brief The queue of scren positions to re-draw
   static std::queue<Vector2> dirtyChars;
+
+public:
+  /// @brief The console handle
+  static HANDLE consoleHandle;
 
 private:
   /// @brief Hides the console cursor

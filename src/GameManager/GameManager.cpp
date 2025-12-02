@@ -1,21 +1,27 @@
 #include "GameManager.h"
+#include "../data/Sprites/Sprites.h"
 #include "../rendering/Display/Display.h"
 #include <chrono>
+#include <iostream>
 
 using namespace Snake;
 using namespace Rendering;
+using namespace Data;
 
 CellType GameManager::cells[Consts::MAP_X][Consts::MAP_Y];
 std::optional<Vector2> GameManager::applePosition = std::nullopt;
 std::deque<Vector2> GameManager::snake;
-std::vector<SpriteRenderer *> GameManager::snakeRenderers;
+std::deque<SpriteRenderer> GameManager::snakeRenderers;
 
 void GameManager::Initialize() {
   // #region Initialize
   Display::Initialize();
+  // std::cout << "Display init" << std::endl;
   InitializeGrid();
+  // std::cout << "Grid Initialized" << std::endl;
 
   SpawnSnake();
+  // std::cout << "Snake Spawned" << std::endl;
 
   Run();
   // #endregion
@@ -32,10 +38,13 @@ void GameManager::InitializeGrid() {
 }
 
 void GameManager::Run() {
+
+
   // #region Run
   auto lastFrame = std::chrono::high_resolution_clock::now();
-
+  std::cout << "Running" << std::endl;
   while (true) {
+    // std::cout << "Running tick" << std::endl;
 
     auto thisFrame = std::chrono::high_resolution_clock::now();
     float deltaTime = std::chrono::duration<float>(thisFrame - lastFrame).count();
@@ -49,10 +58,17 @@ void GameManager::Run() {
 
 void GameManager::SpawnSnake() {
   // #region SpawnSnake
-  short x = Consts::MAP_X / 2;
-  short y = Consts::MAP_Y / 2;
 
-  snake.push_front(Vector2(x, y));
+  float x = Consts::MAP_X / 2;
+  float y = Consts::MAP_Y / 2;
+  // std::cout << x << "-" << y << std::endl;
+
+  Vector2 spawnPos = Vector2(x, y);
+
+  snake.push_front(spawnPos);
+
+  SpriteRenderer headRenderer = SpriteRenderer(spawnPos, &Sprites::head_right);
+  snakeRenderers.push_front(headRenderer);
   // #endregion
 }
 
@@ -67,6 +83,7 @@ Vector2 GameManager::GetNewApplePossition() {
     int rnd = std::rand() % gridPositions;
     short x = rnd % Consts::MAP_Y;
     short y = rnd / Consts::MAP_X;
+
     isPositionSafe = cells[x][y] != CellType::Snake;
     if (isPositionSafe) pos = Vector2(x, y);
   }
@@ -76,9 +93,13 @@ Vector2 GameManager::GetNewApplePossition() {
 
 void GameManager::Tick(float deltaTime) {
   // #region Tick
-  if (applePosition == std::nullopt) applePosition = GetNewApplePossition();
 
+  if (applePosition == std::nullopt) applePosition = GetNewApplePossition();
   Display::Tick();
+
+  COORD coord = {0, 0};
+  SetConsoleCursorPosition(Display::consoleHandle, coord);
+  std::cout << "Tick";
   // #endregion
 }
 

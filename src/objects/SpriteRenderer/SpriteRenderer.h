@@ -21,7 +21,6 @@ public:
   /// @brief Whether this renderer should be rendered
   bool render;
 
-
   /// @brief Creates a new SpriteRenderer
   /// @param position The position in the screen
   /// @param sprite The initial sprite
