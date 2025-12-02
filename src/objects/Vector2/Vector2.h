@@ -25,9 +25,23 @@ public:
   /// @return The inverse vector
   Vector2 Inverse() const { return Vector2(-x, -y); }
 
+  Vector2 operator*(const float num) const { return Vector2(x * num, y * num); }
   Vector2 operator*(const Vector2 &other) const { return Vector2(x * other.x, y * other.y); }
+  Vector2 &operator*=(const float num) {
+    x *= num;
+    y *= num;
+    return *this;
+  }
+
   Vector2 operator/(const Vector2 &other) const { return Vector2(x / other.x, y / other.y); }
+
   Vector2 operator+(const Vector2 &other) const { return Vector2(x + other.x, y + other.y); }
+  Vector2 &operator+=(const Vector2 &other) {
+    x += other.x;
+    y += other.y;
+    return *this;
+  }
+
   Vector2 operator-(const Vector2 &other) const { return Vector2(x - other.x, y - other.y); }
   bool operator==(const Vector2 &other) const { return x == other.x && y == other.y; }
   bool operator!=(const Vector2 &other) const { return !(*this == other); }

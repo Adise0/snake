@@ -26,6 +26,7 @@ private:
   static int tick;
   static bool isPlaying;
   static Vector2 currentDirection;
+  static Vector2 bufferedDirection;
 
 public:
   /// @brief Initializes the gameManager

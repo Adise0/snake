@@ -15,7 +15,8 @@ std::deque<SpriteRenderer> GameManager::snakeRenderers;
 int GameManager::tick = 0;
 int GameManager::frame = 0;
 bool GameManager::isPlaying = false;
-Vector2 GameManager::currentDirection = Vector2::Right;
+Vector2 GameManager::currentDirection = Vector2::Zero;
+Vector2 GameManager::bufferedDirection = Vector2::Zero;
 
 void GameManager::Initialize() {
   // #region Initialize
@@ -45,7 +46,7 @@ void GameManager::Run() {
   const float fixedDelta = std::pow(Consts::TICKS_PER_SECOND, -1); // Equivalent to 1/TicksPerSec
   float accumulator = 0.0f;
 
-  while (isPlaying) {
+  while (true) {
 
     auto thisFrame = std::chrono::high_resolution_clock::now();
     float deltaTime = std::chrono::duration<float>(thisFrame - lastFrame).count();
@@ -98,20 +99,93 @@ Vector2 GameManager::GetNewApplePossition() {
 
 void GameManager::Tick(float deltaTime) {
   // #region Tick
-  if (applePosition == std::nullopt) applePosition = GetNewApplePossition();
-  Display::Tick();
+  Vector2 direction = GetNewDirection();
 
+  if (direction == Vector2::Zero && !isPlaying) return;
+  else isPlaying = true;
+
+  if (!isPlaying) return;
+
+
+  if (applePosition == std::nullopt) applePosition = GetNewApplePossition();
+
+
+  if (direction != Vector2::Zero && direction.Inverse() - currentDirection != Vector2::Zero)
+    bufferedDirection = direction;
+
+  Vector2 offset = Vector2(Consts::CELL_RESOLUTION_X, Consts::CELL_RESOLUTION_Y);
+
+  // if (snakeRenderers.front().position / != snake.front()) {
+
+  // int step = currentDirection.x == 0 ? Consts::CELL_RESOLUTION_Y : Consts::CELL_RESOLUTION_X;
+
+  Vector2 newPos = snake.front() * offset;
   COORD coord = {0, 0};
   SetConsoleCursorPosition(Display::consoleHandle, coord);
-  std::cout << "Tick: " << frame;
-  frame++;
+  std::cout << "\33[2K\r" << "Dih: " << bufferedDirection.x << " - " << bufferedDirection.y;
+
+  snakeRenderers.front().position = newPos;
+  // }
+
+
+  Display::Tick();
   // #endregion
 }
 
+bool GameManager::IsKeyPressed(int key) {
+  // #region IsKeyPressed
+  return (GetAsyncKeyState(key) & 0x8000) != 0;
+  // #endregion
+}
+
+Vector2 GameManager::GetNewDirection() {
+  // #region GetNewDirection
+  if (IsKeyPressed('W')) return Vector2::Up;
+  if (IsKeyPressed('A')) return Vector2::Left;
+  if (IsKeyPressed('S')) return Vector2::Down;
+  if (IsKeyPressed('D')) return Vector2::Right;
+  return Vector2::Zero;
+  // #endregion
+}
+
+bool GameManager::IsCellSafe(Vector2 cell) {
+  if (cell.x < 0 || cell.x > Consts::MAP_X - 1 || cell.y < 0 || cell.y > Consts::MAP_Y - 1)
+    return false;
+  // TODO: Add snake collisioon
+  return true;
+}
+
 void GameManager::FixedTick() {
+  // #region FixedTick
+
+  if (!isPlaying || bufferedDirection == Vector2::Zero) return;
+
+  if (bufferedDirection != currentDirection) currentDirection = bufferedDirection;
+
   COORD coord = {0, 1};
   SetConsoleCursorPosition(Display::consoleHandle, coord);
-  std::cout << "Fixed tick: " << tick;
+  std::cout << "Next cell: " << currentDirection.x << " - " << currentDirection.y
+            << " Tick: " << tick;
   tick++;
+
+  Vector2 currentCell = snake.front();
+  Vector2 nextCell = currentCell + currentDirection;
+
+
+
+  if (!IsCellSafe(nextCell)) {
+    COORD coord = {0, 1};
+    SetConsoleCursorPosition(Display::consoleHandle, coord);
+    std::cout << "Game over";
+    isPlaying = false;
+    return;
+  }
+
+  snake.push_front(nextCell);
+  if (applePosition != nextCell) {
+    snake.pop_back();
+  }
+
+  // #endregion
 }
 
