@@ -12,17 +12,19 @@ CellType GameManager::cells[Consts::MAP_X][Consts::MAP_Y];
 std::optional<Vector2> GameManager::applePosition = std::nullopt;
 std::deque<Vector2> GameManager::snake;
 std::deque<SpriteRenderer> GameManager::snakeRenderers;
+int GameManager::tick = 0;
+int GameManager::frame = 0;
+bool GameManager::isPlaying = false;
+Vector2 GameManager::currentDirection = Vector2::Right;
 
 void GameManager::Initialize() {
   // #region Initialize
   Display::Initialize();
-  // std::cout << "Display init" << std::endl;
+
   InitializeGrid();
-  // std::cout << "Grid Initialized" << std::endl;
-
   SpawnSnake();
-  // std::cout << "Snake Spawned" << std::endl;
 
+  Display::Tick();
   Run();
   // #endregion
 }
@@ -38,17 +40,22 @@ void GameManager::InitializeGrid() {
 }
 
 void GameManager::Run() {
-
-
   // #region Run
   auto lastFrame = std::chrono::high_resolution_clock::now();
-  std::cout << "Running" << std::endl;
-  while (true) {
-    // std::cout << "Running tick" << std::endl;
+  const float fixedDelta = std::pow(Consts::TICKS_PER_SECOND, -1); // Equivalent to 1/TicksPerSec
+  float accumulator = 0.0f;
+
+  while (isPlaying) {
 
     auto thisFrame = std::chrono::high_resolution_clock::now();
     float deltaTime = std::chrono::duration<float>(thisFrame - lastFrame).count();
     lastFrame = thisFrame;
+
+    accumulator += deltaTime;
+    if (accumulator >= fixedDelta) {
+      accumulator = 0;
+      FixedTick();
+    }
 
     Tick(deltaTime);
   }
@@ -59,16 +66,14 @@ void GameManager::Run() {
 void GameManager::SpawnSnake() {
   // #region SpawnSnake
 
-  float x = Consts::MAP_X / 2;
-  float y = Consts::MAP_Y / 2;
-  // std::cout << x << "-" << y << std::endl;
+  int x = (Consts::MAP_X / 2);
+  int y = (Consts::MAP_Y / 2);
 
   Vector2 spawnPos = Vector2(x, y);
-
   snake.push_front(spawnPos);
 
-  SpriteRenderer headRenderer = SpriteRenderer(spawnPos, &Sprites::head_right);
-  snakeRenderers.push_front(headRenderer);
+  Vector2 screenPosition = Vector2(x * Consts::CELL_RESOLUTION_X, y * Consts::CELL_RESOLUTION_Y);
+  snakeRenderers.emplace_front(screenPosition, &Sprites::head_right);
   // #endregion
 }
 
@@ -81,7 +86,7 @@ Vector2 GameManager::GetNewApplePossition() {
 
   while (!isPositionSafe) {
     int rnd = std::rand() % gridPositions;
-    short x = rnd % Consts::MAP_Y;
+    short x = rnd % Consts::MAP_X;
     short y = rnd / Consts::MAP_X;
 
     isPositionSafe = cells[x][y] != CellType::Snake;
@@ -93,13 +98,20 @@ Vector2 GameManager::GetNewApplePossition() {
 
 void GameManager::Tick(float deltaTime) {
   // #region Tick
-
   if (applePosition == std::nullopt) applePosition = GetNewApplePossition();
   Display::Tick();
 
   COORD coord = {0, 0};
   SetConsoleCursorPosition(Display::consoleHandle, coord);
-  std::cout << "Tick";
+  std::cout << "Tick: " << frame;
+  frame++;
   // #endregion
+}
+
+void GameManager::FixedTick() {
+  COORD coord = {0, 1};
+  SetConsoleCursorPosition(Display::consoleHandle, coord);
+  std::cout << "Fixed tick: " << tick;
+  tick++;
 }
 

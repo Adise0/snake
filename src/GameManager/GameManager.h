@@ -22,7 +22,10 @@ private:
   static std::deque<SpriteRenderer> snakeRenderers;
 
   static SpriteRenderer appleRenderer;
-
+  static int frame;
+  static int tick;
+  static bool isPlaying;
+  static Vector2 currentDirection;
 
 public:
   /// @brief Initializes the gameManager
@@ -32,6 +35,9 @@ private:
   /// @brief The tick method. Ticks every frame
   /// @param deltaTime The delta time passed since last frame
   static void Tick(float deltaTime);
+
+  /// @brief The fixed tick method. Ticks once a second
+  static void FixedTick();
 
   /// @brief Initializes the grid
   static void InitializeGrid();
@@ -48,8 +54,16 @@ private:
   /// @return Whether it's safe
   static bool IsCellSafe(Vector2 cell);
 
-
   /// @brief Spawns the snake in the center of the grid
   static void SpawnSnake();
+
+  /// @brief Checks whether the given key is pressed
+  /// @param key The key to check
+  /// @return Whether it is pressed
+  static bool IsKeyPressed(int key);
+
+  /// @brief Gets the current input direction
+  /// @return The new direction vector
+  static Vector2 GetNewDirection();
 };
 } // namespace Snake
