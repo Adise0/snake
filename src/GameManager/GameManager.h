@@ -25,6 +25,7 @@ private:
   static int frame;
   static int tick;
   static bool isPlaying;
+  static bool isGameOver;
   static Vector2 currentDirection;
   static Vector2 bufferedDirection;
 
