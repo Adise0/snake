@@ -1,6 +1,7 @@
 #include "GameManager.h"
 #include "../data/Sprites/Sprites.h"
 #include "../rendering/Display/Display.h"
+#include <algorithm>
 #include <chrono>
 #include <iostream>
 
@@ -17,8 +18,12 @@ int GameManager::frame = 0;
 bool GameManager::isPlaying = false;
 bool GameManager::isGameOver = false;
 
+float GameManager::tickTimer = 0.0f;
+const float GameManager::fixedDelta = std::pow(Consts::TICKS_PER_SECOND, -1);
+
 Vector2 GameManager::currentDirection = Vector2::Zero;
 Vector2 GameManager::bufferedDirection = Vector2::Zero;
+
 
 void GameManager::Initialize() {
   // #region Initialize
@@ -45,7 +50,7 @@ void GameManager::InitializeGrid() {
 void GameManager::Run() {
   // #region Run
   auto lastFrame = std::chrono::high_resolution_clock::now();
-  const float fixedDelta = std::pow(Consts::TICKS_PER_SECOND, -1); // Equivalent to 1/TicksPerSec
+
   float accumulator = 0.0f;
 
   while (!isGameOver) {
@@ -77,6 +82,9 @@ void GameManager::SpawnSnake() {
 
   Vector2 screenPosition = Vector2(x * Consts::CELL_RESOLUTION_X, y * Consts::CELL_RESOLUTION_Y);
   snakeRenderers.emplace_front(screenPosition, &Sprites::head_right);
+
+  Vector2 screenPosition2 = Vector2(x * Consts::CELL_RESOLUTION_X, y * Consts::CELL_RESOLUTION_Y);
+  snakeRenderers.emplace_back(screenPosition2, &Sprites::square);
   // #endregion
 }
 
@@ -104,11 +112,11 @@ void GameManager::Tick(float deltaTime) {
   Vector2 direction = GetNewDirection();
 
   if (direction == Vector2::Zero && !isPlaying) return;
-  else if (!isGameOver) isPlaying = true;
+  else if (!isGameOver) {
+    isPlaying = true;
+  }
 
   if (!isPlaying) return;
-
-
   if (applePosition == std::nullopt) applePosition = GetNewApplePossition();
 
 
@@ -116,30 +124,17 @@ void GameManager::Tick(float deltaTime) {
     bufferedDirection = direction;
 
   Vector2 offset = Vector2(Consts::CELL_RESOLUTION_X, Consts::CELL_RESOLUTION_Y);
+  tickTimer += deltaTime;
 
-  // if (snakeRenderers.front().position / != snake.front()) {
+  float tickProgression = tickTimer / fixedDelta;
+  tickProgression = std::clamp(tickProgression, 0.0f, 1.0f);
 
 
-  Vector2 newPos = snake.front() * offset;
-  COORD coord = {0, 0};
-  SetConsoleCursorPosition(Display::consoleHandle, coord);
-  std::cout << "\33[2K\r" << "Dih: " << bufferedDirection.x << " - " << bufferedDirection.y;
+  Vector2 prevPos = snake.front() - currentDirection;
+  Vector2 targetPos = snake.front();
 
-  int step = currentDirection.x == 0 ? Consts::CELL_RESOLUTION_Y : Consts::CELL_RESOLUTION_X;
-
-  Vector2 &headPosition = snakeRenderers.front().position;
-  const float eps = 0.5f;
-  bool alignedX = std::fabs(std::fmod(headPosition.x, (float)Consts::CELL_RESOLUTION_X)) < eps;
-  bool alignedY = std::fabs(std::fmod(headPosition.y, (float)Consts::CELL_RESOLUTION_Y)) < eps;
-  bool aligned = alignedX && alignedY;
-
-  if (aligned && snakeDirection != currentDirection) snakeDirection = currentDirection;
-
-  if (snakeRenderers.front().position != newPos) {
-    snakeRenderers.front().position += snakeDirection * step * Consts::TICKS_PER_SECOND * deltaTime;
-  }
-
-  // }
+  snakeRenderers.front().position =
+      (prevPos * offset) + ((targetPos - prevPos) * offset * tickProgression);
 
 
   Display::Tick();
@@ -174,17 +169,11 @@ void GameManager::FixedTick() {
 
   if (!isPlaying || bufferedDirection == Vector2::Zero || isGameOver) return;
 
-  if (bufferedDirection != currentDirection) currentDirection = bufferedDirection;
 
-  COORD coord = {0, 1};
-  SetConsoleCursorPosition(Display::consoleHandle, coord);
-  std::cout << "Next cell: " << currentDirection.x << " - " << currentDirection.y
-            << " Tick: " << tick;
-  tick++;
+  if (currentDirection != bufferedDirection) currentDirection = bufferedDirection;
 
   Vector2 currentCell = snake.front();
   Vector2 nextCell = currentCell + currentDirection;
-
 
 
   if (!IsCellSafe(nextCell)) {
@@ -200,6 +189,18 @@ void GameManager::FixedTick() {
   if (applePosition != nextCell) {
     snake.pop_back();
   }
+
+  Vector2 offset = Vector2(Consts::CELL_RESOLUTION_X, Consts::CELL_RESOLUTION_Y);
+  snakeRenderers.back().position = nextCell * offset;
+
+  // Vector2 a = snakeRenderers.back().position / offset;
+
+  // COORD coord = {0, 1};
+  // SetConsoleCursorPosition(Display::consoleHandle, coord);
+  // std::cout << "X: " << (int)(snakeRenderers.back().position.x) % Consts::CELL_RESOLUTION_X
+  //           << " Y: " << a.y << " Tick: " << tick;
+  tick++;
+  tickTimer = 0.0f;
   // #endregion
 }
 

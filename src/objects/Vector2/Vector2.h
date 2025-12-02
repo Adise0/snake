@@ -24,6 +24,7 @@ public:
   /// @brief Inverses the vector
   /// @return The inverse vector
   Vector2 Inverse() const { return Vector2(-x, -y); }
+  Vector2 ToInts() const { return Vector2((int)x, (int)y); }
 
   Vector2 operator*(const float num) const { return Vector2(x * num, y * num); }
   Vector2 operator*(const Vector2 &other) const { return Vector2(x * other.x, y * other.y); }

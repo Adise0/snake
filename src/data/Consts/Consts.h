@@ -15,7 +15,7 @@ public:
   /// @brief The horizontal size of a Conssolas character (in pixels)
   static constexpr int CHAR_RESOLUTION_X = 11;
   /// @brief The vertical size of a Conssolas character (in pixels)
-  static constexpr int CHAR_RESOLUTION_Y = 22;
+  static constexpr int CHAR_RESOLUTION_Y = 23;
 
   /// @brief The horizontal size of the whole map (in characters)
   static constexpr int RESOLUTION_X = MAP_X * CELL_RESOLUTION_X + 1;

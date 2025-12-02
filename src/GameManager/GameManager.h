@@ -26,6 +26,11 @@ private:
   static int tick;
   static bool isPlaying;
   static bool isGameOver;
+  static bool hasReachedTarget;
+
+  static float tickTimer;
+  static const float fixedDelta;
+
   static Vector2 currentDirection;
   static Vector2 bufferedDirection;
 

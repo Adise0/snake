@@ -1,7 +1,7 @@
 #include "Config.h"
 #include "../../data/Consts/Consts.h"
-#include <Windows.h>
 #include <iostream>
+#include <windows.h>
 
 using namespace Snake::Data;
 
