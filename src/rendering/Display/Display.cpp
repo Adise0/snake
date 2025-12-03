@@ -118,7 +118,11 @@ void Display::FillBackground() {
 
 void Display::DrawSprites() {
   // #region DrawSprites
+
+  // std::cout << " Drawing: " << SpriteRenderer::spriteRenderers.size() << " sprites";
+
   for (SpriteRenderer *spriteRenderer : SpriteRenderer::spriteRenderers) {
+    // std::cout << " - Should render: " << spriteRenderer->render << std::endl;
     if (!spriteRenderer->render) continue;
 
     int width = spriteRenderer->sprite->rect.x;
@@ -142,6 +146,7 @@ void Display::DrawSprites() {
           frameBuffer[x][y] = ' ';
           continue;
         }
+        // std::cout << "Setting char " << characters[spriteY][spriteX] << std::endl;
 
         frameBuffer[x][y] = characters[spriteY][spriteX];
       }

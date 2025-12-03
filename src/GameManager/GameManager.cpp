@@ -83,6 +83,8 @@ void GameManager::SpawnSnake() {
   Vector2 screenPosition = Vector2(x * Consts::CELL_RESOLUTION_X, y * Consts::CELL_RESOLUTION_Y);
   snakeRenderers.emplace_front(screenPosition, &Sprites::head_right);
 
+  std::cout << "Snake init!";
+
   Vector2 screenPosition2 = Vector2(x * Consts::CELL_RESOLUTION_X, y * Consts::CELL_RESOLUTION_Y);
   snakeRenderers.emplace_back(screenPosition2, &Sprites::square);
   // #endregion

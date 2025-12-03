@@ -12,7 +12,7 @@ void SpriteRenderer::RegisterSpriteRenderer(SpriteRenderer *spriteRenderer) {
 
 
 SpriteRenderer::SpriteRenderer(Vector2 position, Sprite *sprite)
-    : position(position), sprite(sprite) {
+    : position(position), sprite(sprite), render(true) {
   RegisterSpriteRenderer(this);
 };
 
