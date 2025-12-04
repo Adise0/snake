@@ -23,7 +23,7 @@ private:
 
   static SpriteRenderer *headRenderer;
   static SpriteRenderer *tailRenderer;
-  // static SpriteRenderer *appleRenderer;
+  static SpriteRenderer *appleRenderer;
 
 
   static int frame;

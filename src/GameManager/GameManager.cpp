@@ -26,7 +26,7 @@ Vector2 GameManager::bufferedDirection = Vector2::Zero;
 
 SpriteRenderer *GameManager::headRenderer = nullptr;
 SpriteRenderer *GameManager::tailRenderer = nullptr;
-// SpriteRenderer *GameManager::appleRenderer = nullptr;
+SpriteRenderer *GameManager::appleRenderer = nullptr;
 
 
 void GameManager::Initialize() {
@@ -121,12 +121,11 @@ Vector2 GameManager::GetNewApplePossition() {
     if (isPositionSafe) pos = Vector2(x, y);
   }
 
-  std::cout << pos.x << pos.y;
-  // Vector2 offset = Vector2(Consts::CELL_RESOLUTION_X, Consts::CELL_RESOLUTION_Y);
-  // Vector2 screenPos = pos * offset;
-  // if (appleRenderer == nullptr) {
-  //   appleRenderer = new SpriteRenderer(screenPos, &Sprites::apple);
-  // } else appleRenderer->position = screenPos;
+  Vector2 offset = Vector2(Consts::CELL_RESOLUTION_X, Consts::CELL_RESOLUTION_Y);
+  Vector2 screenPos = pos * offset;
+  if (appleRenderer == nullptr) {
+    appleRenderer = new SpriteRenderer(screenPos, &Sprites::apple);
+  } else appleRenderer->position = screenPos;
 
   return pos;
   // #endregion
@@ -142,7 +141,7 @@ void GameManager::Tick(float deltaTime) {
   }
 
   if (!isPlaying) return;
-  // if (applePosition == std::nullopt) applePosition = GetNewApplePossition();
+  if (applePosition == std::nullopt) applePosition = GetNewApplePossition();
 
 
   if (direction != Vector2::Zero && direction != currentDirection.Inverse())
@@ -212,29 +211,47 @@ void GameManager::FixedTick() {
   bool didConsumeApple = applePosition == nextCell;
 
   snake.push_front(nextCell);
+  snakeRenderers.emplace_front(currentCell, &Sprites::square);
   if (didConsumeApple) {
+    applePosition = std::nullopt;
+  } else {
     snake.pop_back();
-    snakeRenderers.emplace_front(nextCell, &Sprites::square);
-  } else if (snakeRenderers.size()) {
-
-    SpriteRenderer lastRenderer = snakeRenderers.back();
-    std::cout << "LAst enderer is: " << lastRenderer.position.x;
+    if (snakeRenderers.size() != 0) snakeRenderers.pop_back();
+    // SpriteRenderer lastRenderer = snakeRenderers.back();
     // snakeRenderers.pop_back();
 
     // Vector2 offset = Vector2(Consts::CELL_RESOLUTION_X, Consts::CELL_RESOLUTION_Y);
-    // lastRenderer.position = nextCell * offset;
+    // Vector2 newPos = nextCell * offset;
 
+
+    // COORD coord = {0, 1};
+    // SetConsoleCursorPosition(Display::consoleHandle, coord);
+
+    // std::cout << "\33[2K\r";
+    // std::cout << "Cicling last cell from: " << lastRenderer.position.x << ","
+    //           << lastRenderer.position.y << " To: " << newPos.x << "," << newPos.y;
+
+
+    // lastRenderer.position = newPos;
     // snakeRenderers.push_front(lastRenderer);
+  }
+
+  Vector2 offset = Vector2(Consts::CELL_RESOLUTION_X, Consts::CELL_RESOLUTION_Y);
+  COORD coord = {0, 1};
+  SetConsoleCursorPosition(Display::consoleHandle, coord);
+  std::cout << "\33[2K\r";
+  std::cout << "Snake size: " << snake.size();
+
+  if (snake.size() > 1) {
+    for (size_t i = 1; i < snake.size(); i++) {
+      snakeRenderers[i - 1].position = snake[i] * offset;
+    }
   }
 
 
 
   // Vector2 a = snakeRenderers.back().position / offset;
 
-  // COORD coord = {0, 1};
-  // SetConsoleCursorPosition(Display::consoleHandle, coord);
-  // std::cout << "X: " << (int)(snakeRenderers.back().position.x) % Consts::CELL_RESOLUTION_X
-  //           << " Y: " << a.y << " Tick: " << tick;
   tick++;
   tickTimer = 0.0f;
   // #endregion
