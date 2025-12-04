@@ -239,7 +239,7 @@ void GameManager::FixedTick() {
 
   snake.push_front(nextCell);
 
-  if (snake.size() > 1) snakeRenderers.emplace_front(currentCell * offset, &Sprites::square);
+  if (snake.size() > 1) snakeRenderers.emplace_front(currentCell * offset, &Sprites::body_horiz);
   if (snake.size() == 3 && !tailRenderer->render) {
     tailRenderer->render = true;
   }
@@ -253,6 +253,19 @@ void GameManager::FixedTick() {
       snakeRenderers.pop_back();
     }
   }
+
+  if (currentDirection == Vector2::Right && headRenderer->sprite != &Sprites::head_right) {
+    headRenderer->sprite = &Sprites::head_right;
+  }
+  if (currentDirection == Vector2::Left && headRenderer->sprite != &Sprites::head_left) {
+    headRenderer->sprite = &Sprites::head_left;
+  }
+  // if (currentDirection == Vector2::Right && headRenderer->sprite != &Sprites::head_right) {
+  //   headRenderer->sprite = &Sprites::head_right;
+  // }
+  // if (currentDirection == Vector2::Right && headRenderer->sprite != &Sprites::head_right) {
+  //   headRenderer->sprite = &Sprites::head_right;
+  // }
 
 
 
