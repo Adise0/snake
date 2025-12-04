@@ -10,10 +10,18 @@ void SpriteRenderer::RegisterSpriteRenderer(SpriteRenderer *spriteRenderer) {
   // #endregion
 }
 
+void SpriteRenderer::UnregisterSpriteRenderer(SpriteRenderer *spriteRenderer) {
+
+  auto foundRenderer = std::find(spriteRenderers.begin(), spriteRenderers.end(), spriteRenderer);
+  if (foundRenderer != spriteRenderers.end()) spriteRenderers.erase(foundRenderer);
+}
+
 
 SpriteRenderer::SpriteRenderer(Vector2 position, Sprite *sprite)
     : position(position), sprite(sprite), render(true) {
   RegisterSpriteRenderer(this);
 };
+
+SpriteRenderer::~SpriteRenderer() { UnregisterSpriteRenderer(this); }
 
 } // namespace Snake::Objects

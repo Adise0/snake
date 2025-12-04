@@ -6,6 +6,7 @@ namespace Snake::Data {
 class Sprites {
 public:
   static Sprite head_right;
+  static Sprite tail_right;
   static Sprite square;
   static Sprite apple;
 };
