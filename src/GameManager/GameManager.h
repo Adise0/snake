@@ -21,7 +21,11 @@ private:
   static std::deque<Vector2> snake;
   static std::deque<SpriteRenderer> snakeRenderers;
 
-  static SpriteRenderer appleRenderer;
+  static SpriteRenderer *headRenderer;
+  static SpriteRenderer *tailRenderer;
+  // static SpriteRenderer *appleRenderer;
+
+
   static int frame;
   static int tick;
   static bool isPlaying;

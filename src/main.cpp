@@ -10,5 +10,7 @@ int main() {
   Config::ConfigureConsole();
   GameManager::Initialize();
 
+  _sleep(1000);
+  system("pause");
   return 0;
 }
