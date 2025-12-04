@@ -243,7 +243,7 @@ void GameManager::FixedTick() {
     }
   }
 
-
+  // TODO: add masking of sprites and render both head and tail as normal behind the main sprites
 
   if (snake.size() > 2) {
     for (size_t i = 1; i < snake.size() - 1; i++) {
