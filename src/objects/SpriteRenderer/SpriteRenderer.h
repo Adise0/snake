@@ -24,6 +24,9 @@ public:
   Sprite *sprite;
   /// @brief Whether this renderer should be rendered
   bool render;
+  /// @brief The "z-index" of this renderer
+  short sortingLayer;
+
 
   /// @brief Creates a new SpriteRenderer
   /// @param position The position in the screen

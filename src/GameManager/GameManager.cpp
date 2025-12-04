@@ -25,6 +25,7 @@ Vector2 GameManager::currentDirection = Vector2::Zero;
 Vector2 GameManager::bufferedDirection = Vector2::Zero;
 
 SpriteRenderer *GameManager::headRenderer = nullptr;
+// SpriteRenderer *GameManager::neckRenderer = nullptr;
 SpriteRenderer *GameManager::tailRenderer = nullptr;
 SpriteRenderer *GameManager::appleRenderer = nullptr;
 
@@ -85,14 +86,21 @@ void GameManager::SpawnSnake() {
 
   Vector2 screenPosition = Vector2(x * Consts::CELL_RESOLUTION_X, y * Consts::CELL_RESOLUTION_Y);
 
-
   if (headRenderer == nullptr) {
     headRenderer = new SpriteRenderer(screenPosition, &Sprites::head_right);
+    headRenderer->sortingLayer = 1;
   } else headRenderer->position = screenPosition;
+
+
+  // if (neckRenderer == nullptr) {
+  //   neckRenderer = new SpriteRenderer(screenPosition, &Sprites::neck_right);
+  // } else neckRenderer->position = screenPosition;
+
 
   if (tailRenderer == nullptr) {
     tailRenderer = new SpriteRenderer(screenPosition, &Sprites::tail_right);
     tailRenderer->render = false;
+    tailRenderer->sortingLayer = 1;
   } else {
     tailRenderer->position = screenPosition;
     tailRenderer->render = false;
@@ -158,6 +166,9 @@ void GameManager::Tick(float deltaTime) {
 
   headRenderer->position =
       (prevHeadPos * offset) + ((targetHeadPos - prevHeadPos) * offset * tickProgression);
+
+  // neckRenderer->position = headRenderer->position;
+
   if (snake.size() > 1) {
     Vector2 tailDirection = snake[snake.size() - 2] - snake.back();
 
@@ -225,11 +236,11 @@ void GameManager::FixedTick() {
   SetConsoleCursorPosition(Display::consoleHandle, coord);
   std::cout << "\33[2K\r";
   std::cout << "Snake size: " << snake.size() << " Renderer size: " << snakeRenderers.size();
+
   snake.push_front(nextCell);
 
-  if (snake.size() > 2) {
-    snakeRenderers.emplace_front(currentCell * offset, &Sprites::square);
-  } else if (snake.size() == 2 && !tailRenderer->render) {
+  if (snake.size() > 1) snakeRenderers.emplace_front(currentCell * offset, &Sprites::square);
+  if (snake.size() == 3 && !tailRenderer->render) {
     tailRenderer->render = true;
   }
 
@@ -239,14 +250,14 @@ void GameManager::FixedTick() {
     snake.back();
     snake.pop_back();
     if (snakeRenderers.size() != 0) {
-      snakeRenderers.pop_back(); //a
+      snakeRenderers.pop_back();
     }
   }
 
-  // TODO: add masking of sprites and render both head and tail as normal behind the main sprites
+
 
   if (snake.size() > 2) {
-    for (size_t i = 1; i < snake.size() - 1; i++) {
+    for (size_t i = 1; i < snake.size(); i++) {
       snakeRenderers[i - 1].position = snake[i] * offset;
     }
   }

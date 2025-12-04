@@ -22,7 +22,9 @@ private:
   static std::deque<SpriteRenderer> snakeRenderers;
 
   static SpriteRenderer *headRenderer;
+  // static SpriteRenderer *neckRenderer;
   static SpriteRenderer *tailRenderer;
+  // static SpriteRenderer *preTailRenderer;
   static SpriteRenderer *appleRenderer;
 
 

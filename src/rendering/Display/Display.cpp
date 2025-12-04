@@ -121,6 +121,7 @@ void Display::DrawSprites() {
 
   // std::cout << " Drawing: " << SpriteRenderer::spriteRenderers.size() << " sprites";
 
+
   for (SpriteRenderer *spriteRenderer : SpriteRenderer::spriteRenderers) {
     // std::cout << " - Should render: " << spriteRenderer->render << std::endl;
     if (!spriteRenderer->render) continue;

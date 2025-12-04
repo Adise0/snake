@@ -1,4 +1,5 @@
 #include "SpriteRenderer.h"
+#include <algorithm>
 
 namespace Snake::Objects {
 
@@ -7,6 +8,8 @@ std::vector<SpriteRenderer *> SpriteRenderer::spriteRenderers;
 void SpriteRenderer::RegisterSpriteRenderer(SpriteRenderer *spriteRenderer) {
   // #region RegisterSpriteRenderer
   spriteRenderers.push_back(spriteRenderer);
+  std::sort(spriteRenderers.begin(), spriteRenderers.end(),
+            [](SpriteRenderer *a, SpriteRenderer *b) { return a->sortingLayer < b->sortingLayer; });
   // #endregion
 }
 
@@ -18,7 +21,7 @@ void SpriteRenderer::UnregisterSpriteRenderer(SpriteRenderer *spriteRenderer) {
 
 
 SpriteRenderer::SpriteRenderer(Vector2 position, Sprite *sprite)
-    : position(position), sprite(sprite), render(true) {
+    : position(position), sprite(sprite), render(true), sortingLayer(0) {
   RegisterSpriteRenderer(this);
 };
 
