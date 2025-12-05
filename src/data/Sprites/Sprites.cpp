@@ -46,15 +46,43 @@ Sprite Sprites::tail_down = Sprite(std::vector<std::u32string>{
     U"|    |",
 });
 
-Sprite Sprites::body_horiz = Sprite(std::vector<std::u32string>{U"-----", U"bbbbb", U"-----"});
-Sprite Sprites::body_vert = Sprite(std::vector<std::u32string>{U"|bbbb|", U"|bbbb|", U"|bbbb|"});
+Sprite Sprites::body_horiz = Sprite(std::vector<std::u32string>{
+    U"-----",
+    U"bbbbb",
+    U"-----",
+});
+Sprite Sprites::body_vert = Sprite(std::vector<std::u32string>{
+    U"|bbbb|",
+    U"|bbbb|",
+    U"|bbbb|",
+});
 
-Sprite Sprites::body_VDL = Sprite(std::vector<std::u32string>{U"-----", U"bbbbb", U"-----"});
-Sprite Sprites::body_VDR = Sprite(std::vector<std::u32string>{U"-----", U"bbbbb", U"-----"});
-Sprite Sprites::body_VUL = Sprite(std::vector<std::u32string>{U"-----", U"bbbbb", U"-----"});
-Sprite Sprites::body_VUR = Sprite(std::vector<std::u32string>{U"-----", U"bbbbb", U"-----"});
+Sprite Sprites::body_VDL = Sprite(std::vector<std::u32string>{
+    U"/bbbb|",
+    U"bbbbb/",
+    U"----bb",
+});
+Sprite Sprites::body_VDR = Sprite(std::vector<std::u32string>{
+    U"|bbbbL",
+    U"\\bbbbb",
+    U"bb----",
+});
+Sprite Sprites::body_VUL = Sprite(std::vector<std::u32string>{
+    U"----bb",
+    U"bbbbb\\",
+    U"\\bbbb|",
+});
+Sprite Sprites::body_VUR = Sprite(std::vector<std::u32string>{
+    U"bb----",
+    U"/bbbbb",
+    U"|bbbbL",
+});
 
-Sprite Sprites::apple = Sprite(std::vector<std::u32string>{U"  ,  ", U" /-\\ ", U" \\_/ "});
+Sprite Sprites::apple = Sprite(std::vector<std::u32string>{
+    U"  ,  ",
+    U" /-\\ ",
+    U" \\_/ ",
+});
 } // namespace Snake::Data
 
 

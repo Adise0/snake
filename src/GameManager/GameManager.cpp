@@ -239,7 +239,59 @@ void GameManager::FixedTick() {
 
   snake.push_front(nextCell);
 
-  if (snake.size() > 1) snakeRenderers.emplace_front(currentCell * offset, &Sprites::body_horiz);
+  if (snake.size() > 1) {
+    Vector2 prevDirection = snake[snake.size() - 2];
+    Vector2 nextDirection = snake.back();
+
+    Sprite *sprite;
+
+    if (prevDirection == Vector2::Up) {
+      if (nextDirection == Vector2::Down) {
+        sprite = &Sprites::body_vert;
+      }
+      if (nextDirection == Vector2::Right) {
+        sprite = &Sprites::body_VDR;
+      }
+      if (nextDirection == Vector2::Left) {
+        sprite = &Sprites::body_VDL;
+      }
+    }
+    if (prevDirection == Vector2::Down) {
+      if (nextDirection == Vector2::Up) {
+        sprite = &Sprites::body_vert;
+      }
+      if (nextDirection == Vector2::Right) {
+        sprite = &Sprites::body_VUR;
+      }
+      if (nextDirection == Vector2::Left) {
+        sprite = &Sprites::body_VUR;
+      }
+    }
+    if (prevDirection == Vector2::Right) {
+      if (nextDirection == Vector2::Left) {
+        sprite = &Sprites::body_horiz;
+      }
+      if (nextDirection == Vector2::Up) {
+        sprite = &Sprites::body_VUR;
+      }
+      if (nextDirection == Vector2::Down) {
+        sprite = &Sprites::body_VDR;
+      }
+    }
+    if (prevDirection == Vector2::Left) {
+      if (nextDirection == Vector2::Right) {
+        sprite = &Sprites::body_horiz;
+      }
+      if (nextDirection == Vector2::Up) {
+        sprite = &Sprites::body_VUL;
+      }
+      if (nextDirection == Vector2::Down) {
+        sprite = &Sprites::body_VUL;
+      }
+    }
+
+    snakeRenderers.emplace_front(currentCell * offset, &sprite);
+  }
   if (snake.size() == 3 && !tailRenderer->render) {
     tailRenderer->render = true;
   }
