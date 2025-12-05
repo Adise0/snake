@@ -267,6 +267,22 @@ void GameManager::FixedTick() {
     headRenderer->sprite = &Sprites::head_down;
   }
 
+  if (snake.size() > 1) {
+
+    Vector2 tailDirection = snake[snake.size() - 2] - snake.back();
+    if (tailDirection == Vector2::Right && tailRenderer->sprite != &Sprites::tail_right) {
+      tailRenderer->sprite = &Sprites::tail_right;
+    }
+    if (tailDirection == Vector2::Left && tailRenderer->sprite != &Sprites::tail_left) {
+      tailRenderer->sprite = &Sprites::tail_left;
+    }
+    if (tailDirection == Vector2::Up && tailRenderer->sprite != &Sprites::tail_up) {
+      tailRenderer->sprite = &Sprites::tail_up;
+    }
+    if (tailDirection == Vector2::Down && tailRenderer->sprite != &Sprites::tail_down) {
+      tailRenderer->sprite = &Sprites::tail_down;
+    }
+  }
 
 
   if (snake.size() > 2) {
