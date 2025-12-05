@@ -260,12 +260,12 @@ void GameManager::FixedTick() {
   if (currentDirection == Vector2::Left && headRenderer->sprite != &Sprites::head_left) {
     headRenderer->sprite = &Sprites::head_left;
   }
-  // if (currentDirection == Vector2::Right && headRenderer->sprite != &Sprites::head_right) {
-  //   headRenderer->sprite = &Sprites::head_right;
-  // }
-  // if (currentDirection == Vector2::Right && headRenderer->sprite != &Sprites::head_right) {
-  //   headRenderer->sprite = &Sprites::head_right;
-  // }
+  if (currentDirection == Vector2::Up && headRenderer->sprite != &Sprites::head_up) {
+    headRenderer->sprite = &Sprites::head_up;
+  }
+  if (currentDirection == Vector2::Down && headRenderer->sprite != &Sprites::head_down) {
+    headRenderer->sprite = &Sprites::head_down;
+  }
 
 
 
