@@ -17,10 +17,16 @@ public:
 
   static Sprite body_vert;
   static Sprite body_horiz;
+
   static Sprite body_VDR;
   static Sprite body_VDL;
   static Sprite body_VUR;
   static Sprite body_VUL;
+
+  static Sprite body_HRU;
+  static Sprite body_HLU;
+  static Sprite body_HRD;
+  static Sprite body_HLD;
 
   static Sprite apple;
 };

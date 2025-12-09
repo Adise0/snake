@@ -202,7 +202,10 @@ Vector2 GameManager::GetNewDirection() {
 bool GameManager::IsCellSafe(Vector2 cell) {
   if (cell.x < 0 || cell.x > Consts::MAP_X - 1 || cell.y < 0 || cell.y > Consts::MAP_Y - 1)
     return false;
-  // TODO: Add snake collisioon
+
+  for (Vector2 snakCell : snake) {
+    if (snakCell == cell) return false;
+  }
   return true;
 }
 
@@ -234,18 +237,34 @@ void GameManager::FixedTick() {
 
   COORD coord = {0, 1};
   SetConsoleCursorPosition(Display::consoleHandle, coord);
-  std::cout << "\33[2K\r";
-  std::cout << "Snake size: " << snake.size() << " Renderer size: " << snakeRenderers.size();
+  // std::cout << "\33[2K\r";
+  // std::cout << "Snake size: " << snake.size() << " Renderer size: " << snakeRenderers.size();
 
   snake.push_front(nextCell);
 
-  if (snake.size() > 1) {
-    Vector2 prevDirection = snake[snake.size() - 2];
-    Vector2 nextDirection = snake.back();
+  Sprite *sprite = &Sprites::body_vert;
+  if (snake.size() >= 3) {
+    Vector2 nextDirection = snake[0] - snake[1];
+    Vector2 prevDirection = snake[1] - snake[2];
 
-    Sprite *sprite;
+    std::cout << "\33[2K\r";
 
     if (prevDirection == Vector2::Up) {
+      std::cout << "Up\n";
+      if (nextDirection == Vector2::Up) {
+        sprite = &Sprites::body_vert;
+      }
+      if (nextDirection == Vector2::Right) {
+        std::cout << "U_Right\n";
+        sprite = &Sprites::body_VUR;
+      }
+      if (nextDirection == Vector2::Left) {
+        std::cout << "U_Left\n";
+        sprite = &Sprites::body_VUL;
+      }
+    }
+    if (prevDirection == Vector2::Down) {
+      std::cout << "Down\n";
       if (nextDirection == Vector2::Down) {
         sprite = &Sprites::body_vert;
       }
@@ -256,42 +275,39 @@ void GameManager::FixedTick() {
         sprite = &Sprites::body_VDL;
       }
     }
-    if (prevDirection == Vector2::Down) {
-      if (nextDirection == Vector2::Up) {
-        sprite = &Sprites::body_vert;
-      }
-      if (nextDirection == Vector2::Right) {
-        sprite = &Sprites::body_VUR;
-      }
-      if (nextDirection == Vector2::Left) {
-        sprite = &Sprites::body_VUR;
-      }
-    }
     if (prevDirection == Vector2::Right) {
-      if (nextDirection == Vector2::Left) {
+      std::cout << "Right\n";
+      if (nextDirection == Vector2::Right) {
         sprite = &Sprites::body_horiz;
       }
       if (nextDirection == Vector2::Up) {
-        sprite = &Sprites::body_VUR;
+        sprite = &Sprites::body_HLU;
       }
       if (nextDirection == Vector2::Down) {
-        sprite = &Sprites::body_VDR;
+        sprite = &Sprites::body_HLD;
       }
     }
     if (prevDirection == Vector2::Left) {
-      if (nextDirection == Vector2::Right) {
+      std::cout << "Left\n";
+      if (nextDirection == Vector2::Left) {
         sprite = &Sprites::body_horiz;
       }
       if (nextDirection == Vector2::Up) {
-        sprite = &Sprites::body_VUL;
+        std::cout << "UP\n";
+        sprite = &Sprites::body_HRU;
       }
       if (nextDirection == Vector2::Down) {
-        sprite = &Sprites::body_VUL;
+        sprite = &Sprites::body_HRD;
       }
     }
 
-    snakeRenderers.emplace_front(currentCell * offset, &sprite);
+  } else {
+    Vector2 singleDir = snake[0] - snake[1];
+    if (singleDir == Vector2::Left || singleDir == Vector2::Right) sprite = &Sprites::body_horiz;
+    else sprite = &Sprites::body_vert;
   }
+
+  snakeRenderers.emplace_front(currentCell * offset, sprite);
   if (snake.size() == 3 && !tailRenderer->render) {
     tailRenderer->render = true;
   }

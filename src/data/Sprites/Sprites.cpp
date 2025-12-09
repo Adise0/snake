@@ -48,13 +48,13 @@ Sprite Sprites::tail_down = Sprite(std::vector<std::u32string>{
 
 Sprite Sprites::body_horiz = Sprite(std::vector<std::u32string>{
     U"-----",
-    U"bbbbb",
+    U"#####",
     U"-----",
 });
 Sprite Sprites::body_vert = Sprite(std::vector<std::u32string>{
-    U"|bbbb|",
-    U"|bbbb|",
-    U"|bbbb|",
+    U"|####|",
+    U"|####|",
+    U"|####|",
 });
 
 Sprite Sprites::body_VDL = Sprite(std::vector<std::u32string>{
@@ -63,20 +63,28 @@ Sprite Sprites::body_VDL = Sprite(std::vector<std::u32string>{
     U"----bb",
 });
 Sprite Sprites::body_VDR = Sprite(std::vector<std::u32string>{
-    U"|bbbbL",
-    U"\\bbbbb",
+    U"|####L",
+    U"\\#####",
     U"bb----",
 });
-Sprite Sprites::body_VUL = Sprite(std::vector<std::u32string>{
+
+
+
+Sprite Sprites::body_HLD = Sprite(std::vector<std::u32string>{
     U"----bb",
     U"bbbbb\\",
     U"\\bbbb|",
 });
-Sprite Sprites::body_VUR = Sprite(std::vector<std::u32string>{
+Sprite Sprites::body_HRD = Sprite(std::vector<std::u32string>{
     U"bb----",
     U"/bbbbb",
     U"|bbbbL",
 });
+
+Sprite Sprites::body_VUR = Sprites::body_HRD;
+Sprite Sprites::body_VUL = Sprites::body_HLD;
+Sprite Sprites::body_HLU = Sprites::body_VDL;
+Sprite Sprites::body_HRU = Sprites::body_VDR;
 
 Sprite Sprites::apple = Sprite(std::vector<std::u32string>{
     U"  ,  ",
