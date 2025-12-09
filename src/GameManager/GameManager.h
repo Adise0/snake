@@ -36,6 +36,9 @@ private:
 
   static Vector2 currentDirection;
   static Vector2 bufferedDirection;
+  static Vector2 prevDirection;
+
+  static Sprite *tailSprite;
 
 public:
   /// @brief Initializes the gameManager

@@ -21,12 +21,15 @@ float GameManager::tickTimer = 0.0f;
 const float GameManager::fixedDelta = std::pow(Consts::TICKS_PER_SECOND, -1);
 
 Vector2 GameManager::currentDirection = Vector2::Zero;
+Vector2 GameManager::prevDirection = Vector2::Zero;
 Vector2 GameManager::bufferedDirection = Vector2::Zero;
 
 SpriteRenderer *GameManager::headRenderer = nullptr;
 // SpriteRenderer *GameManager::neckRenderer = nullptr;
 SpriteRenderer *GameManager::tailRenderer = nullptr;
 SpriteRenderer *GameManager::appleRenderer = nullptr;
+
+Sprite *GameManager::tailSprite = nullptr;
 
 
 void GameManager::Initialize() {
@@ -85,7 +88,6 @@ void GameManager::SpawnSnake() {
   // if (neckRenderer == nullptr) {
   //   neckRenderer = new SpriteRenderer(screenPosition, &Sprites::neck_right);
   // } else neckRenderer->position = screenPosition;
-
 
   if (tailRenderer == nullptr) {
     tailRenderer = new SpriteRenderer(screenPosition, &Sprites::tail_right);
@@ -170,10 +172,20 @@ void GameManager::Tick(float deltaTime) {
   // neckRenderer->position = headRenderer->position;
 
   if (snake.size() > 1) {
-    Vector2 tailDirection = snake[snake.size() - 2] - snake.back();
+    Vector2 tailDirection =
+        snake.size() <= 2 ? prevDirection : snake[snake.size() - 2] - snake.back();
 
-    Vector2 prevTailPos = snake.back() - tailDirection;
-    Vector2 targetTailPos = snake.back();
+    Vector2 prevTailPos = snake.back();
+    Vector2 targetTailPos = snake.back() + tailDirection;
+
+    if (snake.size() <= 2) {
+      prevTailPos = snake.back() - tailDirection;
+      targetTailPos = snake.back();
+    } else {
+      prevTailPos = snake.back();
+      targetTailPos = snake.back() + tailDirection;
+    }
+
     tailRenderer->position =
         (prevTailPos * offset) + ((targetTailPos - prevTailPos) * offset * tickProgression);
   }
@@ -207,7 +219,9 @@ void GameManager::FixedTick() {
   if (!isPlaying || bufferedDirection == Vector2::Zero || isGameOver) return;
 
 
+  if (prevDirection != currentDirection) prevDirection = currentDirection;
   if (currentDirection != bufferedDirection) currentDirection = bufferedDirection;
+
 
   Vector2 currentCell = snake.front();
   Vector2 nextCell = currentCell + currentDirection;
@@ -234,63 +248,64 @@ void GameManager::FixedTick() {
 
   snake.push_front(nextCell);
 
-  Sprite *sprite = &Sprites::body_vert;
+  Sprite *sprite = &Sprites::body_V;
   if (snake.size() >= 3) {
-    Vector2 nextDirection = snake[0] - snake[1];
-    Vector2 prevDirection = snake[1] - snake[2];
+    Vector2 nextHeadDirection = snake[0] - snake[1];
+    Vector2 prevHeadDirection = snake[1] - snake[2];
 
     std::cout << "\33[2K\r";
 
-    if (prevDirection == Vector2::Up) {
-      if (nextDirection == Vector2::Up) {
-        sprite = &Sprites::body_vert;
+    if (prevHeadDirection == Vector2::Up) {
+      if (nextHeadDirection == Vector2::Up) {
+        sprite = &Sprites::body_V;
       }
-      if (nextDirection == Vector2::Right) {
-        sprite = &Sprites::body_VUR;
+      if (nextHeadDirection == Vector2::Right) {
+        sprite = &Sprites::body_V_UR;
       }
-      if (nextDirection == Vector2::Left) {
-        sprite = &Sprites::body_VUL;
-      }
-    }
-    if (prevDirection == Vector2::Down) {
-      if (nextDirection == Vector2::Down) {
-        sprite = &Sprites::body_vert;
-      }
-      if (nextDirection == Vector2::Right) {
-        sprite = &Sprites::body_VDR;
-      }
-      if (nextDirection == Vector2::Left) {
-        sprite = &Sprites::body_VDL;
+      if (nextHeadDirection == Vector2::Left) {
+        sprite = &Sprites::body_V_UL;
       }
     }
-    if (prevDirection == Vector2::Right) {
-      if (nextDirection == Vector2::Right) {
-        sprite = &Sprites::body_horiz;
+    if (prevHeadDirection == Vector2::Down) {
+      if (nextHeadDirection == Vector2::Down) {
+        sprite = &Sprites::body_V;
       }
-      if (nextDirection == Vector2::Up) {
-        sprite = &Sprites::body_HLU;
+      if (nextHeadDirection == Vector2::Right) {
+        sprite = &Sprites::body_V_DR;
       }
-      if (nextDirection == Vector2::Down) {
-        sprite = &Sprites::body_HLD;
+      if (nextHeadDirection == Vector2::Left) {
+        sprite = &Sprites::body_V_DL;
       }
     }
-    if (prevDirection == Vector2::Left) {
-      if (nextDirection == Vector2::Left) {
-        sprite = &Sprites::body_horiz;
+    if (prevHeadDirection == Vector2::Right) {
+      if (nextHeadDirection == Vector2::Right) {
+        sprite = &Sprites::body_H;
       }
-      if (nextDirection == Vector2::Up) {
-        sprite = &Sprites::body_HRU;
+      if (nextHeadDirection == Vector2::Up) {
+        sprite = &Sprites::body_H_LU;
       }
-      if (nextDirection == Vector2::Down) {
-        sprite = &Sprites::body_HRD;
+      if (nextHeadDirection == Vector2::Down) {
+        sprite = &Sprites::body_H_LD;
+      }
+    }
+    if (prevHeadDirection == Vector2::Left) {
+      if (nextHeadDirection == Vector2::Left) {
+        sprite = &Sprites::body_H;
+      }
+      if (nextHeadDirection == Vector2::Up) {
+        sprite = &Sprites::body_H_RU;
+      }
+      if (nextHeadDirection == Vector2::Down) {
+        sprite = &Sprites::body_H_RD;
       }
     }
 
   } else {
     Vector2 singleDir = snake[0] - snake[1];
-    if (singleDir == Vector2::Left || singleDir == Vector2::Right) sprite = &Sprites::body_horiz;
-    else sprite = &Sprites::body_vert;
+    if (singleDir == Vector2::Left || singleDir == Vector2::Right) sprite = &Sprites::body_H;
+    else sprite = &Sprites::body_V;
   }
+
 
   snakeRenderers.emplace_front(currentCell * offset, sprite);
   if (snake.size() == 3 && !tailRenderer->render) {
@@ -320,22 +335,52 @@ void GameManager::FixedTick() {
     headRenderer->sprite = &Sprites::head_down;
   }
 
-  if (snake.size() > 1) {
+  Sprite *nextTailSprite = &Sprites::tail_down;
+  if (snake.size() >= 2) {
+    Vector2 prevTailDirection;
+    Vector2 tailDirection;
 
-    Vector2 tailDirection = snake[snake.size() - 2] - snake.back();
-    if (tailDirection == Vector2::Right && tailRenderer->sprite != &Sprites::tail_right) {
-      tailRenderer->sprite = &Sprites::tail_right;
+    if (snake.size() == 2) {
+      prevTailDirection = prevDirection;
+      tailDirection = currentDirection;
+    } else {
+      prevTailDirection = snake[snake.size() - 2] - snake.back();
+      tailDirection = snake[snake.size() - 3] - snake[snake.size() - 2];
     }
-    if (tailDirection == Vector2::Left && tailRenderer->sprite != &Sprites::tail_left) {
-      tailRenderer->sprite = &Sprites::tail_left;
+    std::cout << "\33[2K\r";
+    std::cout << "PrevTailDir: (" << prevTailDirection.x << ", " << prevTailDirection.y
+              << ") TailDir: (" << tailDirection.x << ", " << tailDirection.y << ")";
+
+    if (prevTailDirection == Vector2::Up) {
+      if (tailDirection == Vector2::Up) nextTailSprite = &Sprites::tail_up;
+      if (tailDirection == Vector2::Right) nextTailSprite = &Sprites::tail_V_UR;
+      if (tailDirection == Vector2::Left) nextTailSprite = &Sprites::tail_V_UL;
     }
-    if (tailDirection == Vector2::Up && tailRenderer->sprite != &Sprites::tail_up) {
-      tailRenderer->sprite = &Sprites::tail_up;
+    if (prevTailDirection == Vector2::Down) {
+      if (tailDirection == Vector2::Down) nextTailSprite = &Sprites::tail_down;
+      if (tailDirection == Vector2::Right) nextTailSprite = &Sprites::tail_V_DR;
+      if (tailDirection == Vector2::Left) nextTailSprite = &Sprites::tail_V_DL;
     }
-    if (tailDirection == Vector2::Down && tailRenderer->sprite != &Sprites::tail_down) {
-      tailRenderer->sprite = &Sprites::tail_down;
+    if (prevTailDirection == Vector2::Right) {
+      if (tailDirection == Vector2::Right) nextTailSprite = &Sprites::tail_right;
+      if (tailDirection == Vector2::Up) nextTailSprite = &Sprites::tail_H_LU;
+      if (tailDirection == Vector2::Down) nextTailSprite = &Sprites::tail_H_LD;
+    }
+    if (prevTailDirection == Vector2::Left) {
+      if (tailDirection == Vector2::Left) nextTailSprite = &Sprites::tail_left;
+      if (tailDirection == Vector2::Up) nextTailSprite = &Sprites::tail_H_RU;
+      if (tailDirection == Vector2::Down) nextTailSprite = &Sprites::tail_H_RD;
     }
   }
+
+  if (snake.size() == 2) {
+    tailRenderer->sprite = nextTailSprite;
+    tailSprite = nextTailSprite;
+  } else {
+    if (tailSprite != nullptr) tailRenderer->sprite = tailSprite;
+    tailSprite = nextTailSprite;
+  }
+
 
 
   if (snake.size() > 2) {
@@ -343,10 +388,6 @@ void GameManager::FixedTick() {
       snakeRenderers[i - 1].position = snake[i] * offset;
     }
   }
-
-
-
-  // Vector2 a = snakeRenderers.back().position / offset;
 
   tick++;
   tickTimer = 0.0f;
