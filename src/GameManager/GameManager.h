@@ -12,9 +12,6 @@ using namespace Snake::Objects;
 namespace Snake {
 class GameManager {
 private:
-  /// @brief The cell grid
-  static CellType cells[Consts::MAP_X][Consts::MAP_Y];
-
   /// @brief The current apple position
   static std::optional<Vector2> applePosition;
   /// @brief The snake queue
@@ -51,9 +48,6 @@ private:
 
   /// @brief The fixed tick method. Ticks once a second
   static void FixedTick();
-
-  /// @brief Initializes the grid
-  static void InitializeGrid();
 
   /// @brief Runs the tick system
   static void Run();

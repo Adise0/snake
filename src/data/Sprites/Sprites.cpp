@@ -27,23 +27,23 @@ Sprite Sprites::head_down = Sprite(std::vector<std::u32string>{
 
 Sprite Sprites::tail_right = Sprite(std::vector<std::u32string>{
     U"-/^---",
-    U"<b---b",
+    U"<b--##",
     U"-\\v---",
 });
 Sprite Sprites::tail_left = Sprite(std::vector<std::u32string>{
     U"---^\\-",
-    U"b---b>",
+    U"##--b>",
     U"---v/-",
 });
 Sprite Sprites::tail_up = Sprite(std::vector<std::u32string>{
+    U"|b##b|",
     U"|b||b|",
-    U"|    |",
     U"< ^^ >",
 });
 Sprite Sprites::tail_down = Sprite(std::vector<std::u32string>{
     U"< ^^ >",
     U"|b||b|",
-    U"|    |",
+    U"|b##b|",
 });
 
 Sprite Sprites::body_horiz = Sprite(std::vector<std::u32string>{
@@ -52,18 +52,18 @@ Sprite Sprites::body_horiz = Sprite(std::vector<std::u32string>{
     U"-----",
 });
 Sprite Sprites::body_vert = Sprite(std::vector<std::u32string>{
-    U"|####|",
-    U"|####|",
-    U"|####|",
+    U"|b##b|",
+    U"|b##b|",
+    U"|b##b|",
 });
 
 Sprite Sprites::body_VDL = Sprite(std::vector<std::u32string>{
-    U"/bbbb|",
-    U"bbbbb/",
+    U"/b##b|",
+    U"####b/",
     U"----bb",
 });
 Sprite Sprites::body_VDR = Sprite(std::vector<std::u32string>{
-    U"|####L",
+    U"|b##bL",
     U"\\#####",
     U"bb----",
 });
@@ -72,13 +72,13 @@ Sprite Sprites::body_VDR = Sprite(std::vector<std::u32string>{
 
 Sprite Sprites::body_HLD = Sprite(std::vector<std::u32string>{
     U"----bb",
-    U"bbbbb\\",
-    U"\\bbbb|",
+    U"#####\\",
+    U"\\b##b|",
 });
 Sprite Sprites::body_HRD = Sprite(std::vector<std::u32string>{
     U"bb----",
-    U"/bbbbb",
-    U"|bbbbL",
+    U"/#####",
+    U"|b##bL",
 });
 
 Sprite Sprites::body_VUR = Sprites::body_HRD;

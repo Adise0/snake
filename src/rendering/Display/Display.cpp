@@ -143,7 +143,7 @@ void Display::DrawSprites() {
 
         int x = positionX + spriteX;
         int y = positionY + spriteY;
-
+        if (x < 0 || x >= Consts::RESOLUTION_X || y < 0 || y >= Consts::RESOLUTION_Y) continue;
 
         if (characters[spriteY][spriteX] == 'b') {
           frameBuffer[x][y] = ' ';

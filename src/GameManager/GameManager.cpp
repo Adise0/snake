@@ -9,7 +9,6 @@ using namespace Snake;
 using namespace Rendering;
 using namespace Data;
 
-CellType GameManager::cells[Consts::MAP_X][Consts::MAP_Y];
 std::optional<Vector2> GameManager::applePosition = std::nullopt;
 std::deque<Vector2> GameManager::snake;
 std::deque<SpriteRenderer> GameManager::snakeRenderers;
@@ -34,7 +33,6 @@ void GameManager::Initialize() {
   // #region Initialize
   Display::Initialize();
 
-  InitializeGrid();
   SpawnSnake();
 
   Display::Tick();
@@ -42,15 +40,7 @@ void GameManager::Initialize() {
   // #endregion
 }
 
-void GameManager::InitializeGrid() {
-  // #region InitializeGrid
-  for (size_t y = 0; y < Consts::MAP_Y; y++) {
-    for (size_t x = 0; x < Consts::MAP_X; x++) {
-      cells[x][y] = CellType::Empty;
-    }
-  }
-  // #endregion
-}
+
 
 void GameManager::Run() {
   // #region Run
@@ -112,6 +102,16 @@ void GameManager::SpawnSnake() {
   // #endregion
 }
 
+bool GameManager::IsCellSafe(Vector2 cell) {
+  if (cell.x < 0 || cell.x > Consts::MAP_X - 1 || cell.y < 0 || cell.y > Consts::MAP_Y - 1)
+    return false;
+
+  for (Vector2 snakCell : snake) {
+    if (snakCell == cell) return false;
+  }
+  return true;
+}
+
 Vector2 GameManager::GetNewApplePossition() {
   // #region GetNewApplePossition
   bool isPositionSafe = false;
@@ -124,7 +124,7 @@ Vector2 GameManager::GetNewApplePossition() {
     short x = rnd % Consts::MAP_X;
     short y = rnd / Consts::MAP_X;
 
-    isPositionSafe = cells[x][y] != CellType::Snake;
+    isPositionSafe = IsCellSafe(Vector2(x, y));
     if (isPositionSafe) pos = Vector2(x, y);
   }
 
@@ -199,15 +199,7 @@ Vector2 GameManager::GetNewDirection() {
   // #endregion
 }
 
-bool GameManager::IsCellSafe(Vector2 cell) {
-  if (cell.x < 0 || cell.x > Consts::MAP_X - 1 || cell.y < 0 || cell.y > Consts::MAP_Y - 1)
-    return false;
 
-  for (Vector2 snakCell : snake) {
-    if (snakCell == cell) return false;
-  }
-  return true;
-}
 
 void GameManager::FixedTick() {
   // #region FixedTick
@@ -250,21 +242,17 @@ void GameManager::FixedTick() {
     std::cout << "\33[2K\r";
 
     if (prevDirection == Vector2::Up) {
-      std::cout << "Up\n";
       if (nextDirection == Vector2::Up) {
         sprite = &Sprites::body_vert;
       }
       if (nextDirection == Vector2::Right) {
-        std::cout << "U_Right\n";
         sprite = &Sprites::body_VUR;
       }
       if (nextDirection == Vector2::Left) {
-        std::cout << "U_Left\n";
         sprite = &Sprites::body_VUL;
       }
     }
     if (prevDirection == Vector2::Down) {
-      std::cout << "Down\n";
       if (nextDirection == Vector2::Down) {
         sprite = &Sprites::body_vert;
       }
@@ -276,7 +264,6 @@ void GameManager::FixedTick() {
       }
     }
     if (prevDirection == Vector2::Right) {
-      std::cout << "Right\n";
       if (nextDirection == Vector2::Right) {
         sprite = &Sprites::body_horiz;
       }
@@ -288,12 +275,10 @@ void GameManager::FixedTick() {
       }
     }
     if (prevDirection == Vector2::Left) {
-      std::cout << "Left\n";
       if (nextDirection == Vector2::Left) {
         sprite = &Sprites::body_horiz;
       }
       if (nextDirection == Vector2::Up) {
-        std::cout << "UP\n";
         sprite = &Sprites::body_HRU;
       }
       if (nextDirection == Vector2::Down) {
