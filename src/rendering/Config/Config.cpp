@@ -33,8 +33,23 @@ void Config::SetConsoleSize() {
 
   if (owner == NULL) {
     SetWindowPos(hwnd, nullptr, 0, 0, 100, height, SWP_NOZORDER | SWP_NOMOVE);
+
+    DWORD mode;
+    GetConsoleMode(hwnd, &mode);
+
+    // Turn off echo and line buffering
+    mode &= ~(ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT);
+    SetConsoleMode(hwnd, mode);
+
   } else {
     SetWindowPos(owner, nullptr, 0, 0, width, height, SWP_NOZORDER | SWP_NOMOVE);
+
+    DWORD mode;
+    GetConsoleMode(owner, &mode);
+
+    // Turn off echo and line buffering
+    mode &= ~(ENABLE_ECHO_INPUT | ENABLE_LINE_INPUT);
+    SetConsoleMode(owner, mode);
   }
 }
 } // namespace Snake::Rendering

@@ -87,9 +87,9 @@ Sprite Sprites::body_HLU = Sprites::body_VDL;
 Sprite Sprites::body_HRU = Sprites::body_VDR;
 
 Sprite Sprites::apple = Sprite(std::vector<std::u32string>{
-    U"  ,  ",
-    U" /-\\ ",
-    U" \\_/ ",
+    U"   ,   ",
+    U" /-v-\\ ",
+    U" \\_^_/ ",
 });
 } // namespace Snake::Data
 
