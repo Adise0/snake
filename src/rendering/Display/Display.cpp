@@ -1,6 +1,7 @@
 #include "Display.h"
 #include "../../data/Consts/Consts.h"
 #include "../../objects/SpriteRenderer/SpriteRenderer.h"
+#include <algorithm>
 #include <codecvt>
 #include <iostream>
 
@@ -22,10 +23,22 @@ void Display::Initialize() {
   // #region Initialize
   consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 
+  HideCursor();
+
   InitializeBackground();
   InitializeBuffers();
 
   FillBackground();
+  // #endregion
+}
+
+void Display::HideCursor() {
+  // #region HideCursor
+  CONSOLE_CURSOR_INFO cursorInfo;
+  GetConsoleCursorInfo(consoleHandle, &cursorInfo);
+
+  cursorInfo.bVisible = FALSE;
+  SetConsoleCursorInfo(consoleHandle, &cursorInfo);
   // #endregion
 }
 
@@ -106,7 +119,13 @@ void Display::FillBackground() {
 
 void Display::DrawSprites() {
   // #region DrawSprites
+
+  // std::cout << " Drawing: " << SpriteRenderer::spriteRenderers.size() << " sprites";
+
+
+
   for (SpriteRenderer *spriteRenderer : SpriteRenderer::spriteRenderers) {
+    // std::cout << " - Should render: " << spriteRenderer->render << std::endl;
     if (!spriteRenderer->render) continue;
 
     int width = spriteRenderer->sprite->rect.x;
@@ -114,13 +133,6 @@ void Display::DrawSprites() {
 
     int positionX = spriteRenderer->position.x;
     int positionY = spriteRenderer->position.y;
-
-
-    COORD consolePos = {0, 0};
-    SetConsoleCursorPosition(consoleHandle, consolePos);
-    std::cout << "\33[2K";
-    std::cout << "Width: " << width << " Height: " << height << " Expected: " << width * height
-              << std::endl;
 
     std::vector<std::u32string> &characters = spriteRenderer->sprite->characters;
 
@@ -131,12 +143,14 @@ void Display::DrawSprites() {
 
         int x = positionX + spriteX;
         int y = positionY + spriteY;
-
+        if (x < 0 || x >= Consts::RESOLUTION_X || y < 0 || y >= Consts::RESOLUTION_Y) continue;
 
         if (characters[spriteY][spriteX] == 'b') {
           frameBuffer[x][y] = ' ';
           continue;
         }
+
+        // std::cout << "Setting char " << characters[spriteY][spriteX] << std::endl;
 
         frameBuffer[x][y] = characters[spriteY][spriteX];
       }
@@ -161,11 +175,6 @@ void Display::ComputeDirtyChars() {
 
 void Display::Print() {
   // #region Print
-  COORD consolePos = {0, 1};
-  SetConsoleCursorPosition(consoleHandle, consolePos);
-  std::cout << "\33[2K";
-  std::cout << "Chars to re-render: " << dirtyChars.size() << std::endl;
-
   while (!dirtyChars.empty()) {
     Vector2 pos = dirtyChars.front();
     dirtyChars.pop();

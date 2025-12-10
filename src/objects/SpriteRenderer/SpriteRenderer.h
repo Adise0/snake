@@ -12,6 +12,10 @@ public:
   /// @param spriteRenderer The sprite renderer to register
   void RegisterSpriteRenderer(SpriteRenderer *spriteRenderer);
 
+  /// @brief Unregisters the given sprite from the global store
+  /// @param spriteRenderer The sprite renderer to unregister
+  void UnregisterSpriteRenderer(SpriteRenderer *spriteRenderer);
+
 
 public:
   /// @brief The positioon in the screen
@@ -20,11 +24,14 @@ public:
   Sprite *sprite;
   /// @brief Whether this renderer should be rendered
   bool render;
+  /// @brief The "z-index" of this renderer
+  short sortingLayer;
 
 
   /// @brief Creates a new SpriteRenderer
   /// @param position The position in the screen
   /// @param sprite The initial sprite
   SpriteRenderer(Vector2 position, Sprite *sprite);
+  ~SpriteRenderer();
 };
 } // namespace Snake::Objects
