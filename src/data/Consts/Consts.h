@@ -23,6 +23,6 @@ public:
   static constexpr int RESOLUTION_Y = MAP_Y * CELL_RESOLUTION_Y + 1;
 
   /// @brief The ticks per seccond to run the logic at
-  static constexpr int TICKS_PER_SECOND = 1;
+  static constexpr int TICKS_PER_SECOND = 6;
 };
 } // namespace Snake::Data

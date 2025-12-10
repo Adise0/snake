@@ -25,7 +25,6 @@ Vector2 GameManager::prevDirection = Vector2::Zero;
 Vector2 GameManager::bufferedDirection = Vector2::Zero;
 
 SpriteRenderer *GameManager::headRenderer = nullptr;
-// SpriteRenderer *GameManager::neckRenderer = nullptr;
 SpriteRenderer *GameManager::tailRenderer = nullptr;
 SpriteRenderer *GameManager::appleRenderer = nullptr;
 
@@ -178,13 +177,13 @@ void GameManager::Tick(float deltaTime) {
     Vector2 prevTailPos = snake.back();
     Vector2 targetTailPos = snake.back() + tailDirection;
 
-    if (snake.size() <= 2) {
-      prevTailPos = snake.back() - tailDirection;
-      targetTailPos = snake.back();
-    } else {
-      prevTailPos = snake.back();
-      targetTailPos = snake.back() + tailDirection;
-    }
+    // if (snake.size() > 2) {
+    //   prevTailPos = snake.back() - tailDirection;
+    //   targetTailPos = snake.back();
+    // } else {
+    //   prevTailPos = snake.back();
+    //   targetTailPos = snake.back() + tailDirection;
+    // }
 
     tailRenderer->position =
         (prevTailPos * offset) + ((targetTailPos - prevTailPos) * offset * tickProgression);
