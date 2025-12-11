@@ -12,7 +12,7 @@ namespace Snake {
 class GameManager {
 private:
   /// @brief The current apple position
-  static std::optional<Vector2> applePosition;
+  static Vector2 applePosition;
   /// @brief The snake dequeue
   static std::deque<Vector2> snake;
 
@@ -41,8 +41,10 @@ private:
   /// @brief Whether the game is over
   static bool isGameOver;
 
-  static const float deltaTimeAccumulator;
-  static const float fixedDeltaTime;
+  /// @brief The current ticks per second
+  static float ticksPerSecond;
+  /// @brief The fixed delta time between ticks
+  static float fixedDeltaTime;
 
 
 public:
@@ -60,6 +62,10 @@ private:
   /// @brief Runs the tick system
   static void Run();
 
+  /// @brief Gets the fixed delta time between ticks
+  /// @return The computed fixed delta time
+  static float GetFixedDeltaTime();
+
   /// @brief Gets a new safe apple position
   /// @return The new apple position
   static Vector2 GetNewApplePossition();
@@ -71,6 +77,13 @@ private:
 
   /// @brief Spawns the snake in the center of the grid
   static void SpawnSnake();
+
+  /// @brief Spawns the head renderer
+  /// @param position The position to spawn the renderer at
+  static void SpawnHeadRenderer(Vector2 position);
+  /// @brief Spawns the tail renderer
+  /// @param position The position to spawn the renderer at
+  static void SpawnTailRenderer(Vector2 position);
 
   /// @brief Checks whether the given key is pressed
   /// @param key The key to check
