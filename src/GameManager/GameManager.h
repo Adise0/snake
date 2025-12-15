@@ -16,6 +16,8 @@ private:
   /// @brief The snake dequeue
   static std::deque<Vector2> snake;
 
+  /// @brief The offset vector for screen positioning
+  static Vector2 offset;
 
   /// @brief The previous tail direction
   static Vector2 prevTailDirection;

@@ -36,6 +36,7 @@ void GameManager::Initialize() {
   Display::Initialize();
   fixedDeltaTime = GetFixedDeltaTime();
   SpawnSnake();
+  applePosition = GetNewApplePossition();
 
   Display::Tick();
   Run();
@@ -65,6 +66,27 @@ void GameManager::Run() {
   }
   // #endregion
 }
+
+
+void GameManager::Tick(float deltaTime) {
+  // #region Tick
+  Vector2 inputedDirection = GetInputDirection();
+  if (inputedDirection == Vector2::Zero && !isPlaying) return;
+  else if (!isGameOver) isPlaying = true;
+
+  if (!isPlaying) return;
+
+  if (inputedDirection != Vector2::Zero && inputedDirection != currentDirection.Inverse())
+    bufferedDirection = inputedDirection;
+  // #endregion
+}
+
+void GameManager::FixedTick() {
+  // #region FixedTick
+
+  // #endregion
+}
+
 
 // #region Utils
 float GameManager::GetFixedDeltaTime() {
@@ -100,6 +122,24 @@ void GameManager::SpawnTailRenderer(Vector2 position) {
   tailRenderer->sortingLayer = 1;
   // #endregion
 }
+
+
+bool GameManager::IsKeyPressed(int key) {
+  // #region IsKeyPressed
+  return (GetAsyncKeyState(key) & 0x8000) != 0;
+  // #endregion
+}
+
+Vector2 GameManager::GetInputDirection() {
+  // #region GetInputDirection
+  if (IsKeyPressed('W')) return Vector2::Up;
+  if (IsKeyPressed('A')) return Vector2::Left;
+  if (IsKeyPressed('S')) return Vector2::Down;
+  if (IsKeyPressed('D')) return Vector2::Right;
+  return Vector2::Zero;
+  // #endregion
+}
+
 
 
 void GameManager::SpawnSnake() {
