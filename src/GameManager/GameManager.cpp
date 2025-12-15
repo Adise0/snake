@@ -16,6 +16,7 @@ std::deque<Vector2> GameManager::snake;
 Vector2 GameManager::prevTailDirection = Vector2::Zero;
 Vector2 GameManager::currentDirection = Vector2::Zero;
 Vector2 GameManager::bufferedDirection = Vector2::Zero;
+Vector2 GameManager::offset = Vector2(Consts::CELL_RESOLUTION_X, Consts::CELL_RESOLUTION_Y);
 
 SpriteRenderer *GameManager::headRenderer = nullptr;
 SpriteRenderer *GameManager::tailRenderer = nullptr;
@@ -209,6 +210,10 @@ Sprite *GameManager::GetBodySprite(Vector2 prevDir, Vector2 nextDir) {
     if (nextDir == Vector2::Up) return &Sprites::body_H_RU;
     if (nextDir == Vector2::Down) return &Sprites::body_H_RD;
   }
+  // Should never reach here
+  throw std::runtime_error("Invalid body sprite directions " + std::to_string(prevDir.x) + "," +
+                           std::to_string(prevDir.y) + " to " + std::to_string(nextDir.x) + "," +
+                           std::to_string(nextDir.y));
   // #endregion
 }
 
