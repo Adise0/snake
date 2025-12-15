@@ -29,6 +29,7 @@ bool GameManager::isGameOver = false;
 
 float GameManager::ticksPerSecond = 6.0f;
 float GameManager::fixedDeltaTime = 0.0f;
+float GameManager::currentTickTimer = 0.0f;
 
 
 void GameManager::Initialize() {
@@ -76,13 +77,37 @@ void GameManager::Tick(float deltaTime) {
 
   if (!isPlaying) return;
 
+  currentTickTimer += deltaTime;
+  float tickProgression = currentTickTimer / fixedDeltaTime;
+  tickProgression = std::clamp(tickProgression, 0.0f, 1.0f);
+
+
   if (inputedDirection != Vector2::Zero && inputedDirection != currentDirection.Inverse())
     bufferedDirection = inputedDirection;
+
+  Display::Tick();
   // #endregion
 }
 
 void GameManager::FixedTick() {
   // #region FixedTick
+  if (!isPlaying || bufferedDirection == Vector2::Zero || isGameOver) return;
+
+  if (currentDirection != bufferedDirection) currentDirection = bufferedDirection;
+
+  Vector2 currentCell = snake.front();
+  Vector2 nextCell = currentCell + currentDirection;
+
+  if (!IsCellSafe(nextCell)) {
+    EndGame();
+    return;
+  }
+
+  bool didConsumeApple = applePosition == nextCell;
+
+  MoveSnake(nextCell, didConsumeApple);
+  if (didConsumeApple) applePosition = GetNewApplePossition();
+
 
   // #endregion
 }
@@ -140,7 +165,62 @@ Vector2 GameManager::GetInputDirection() {
   // #endregion
 }
 
+void GameManager::MoveSnake(Vector2 nextCell, bool didConsumeApple) {
+  // #region MoveSnake
+  snake.push_front(nextCell);
+  if (!didConsumeApple) snake.pop_back();
 
+  if (snake.size() < 2) return;
+  CreateBodyRenderer();
+  // #endregion
+}
+
+void GameManager::CreateBodyRenderer() {
+  // #region CreateBodyRenderer
+  Vector2 prevHeadDirection = snake[0] - snake[1];
+  Vector2 nextHeadDirection = snake[1] - snake[2];
+
+  Sprite *sprite = GetBodySprite(prevHeadDirection, nextHeadDirection);
+  // #endregion
+}
+
+Sprite *GameManager::GetBodySprite(Vector2 prevDir, Vector2 nextDir) {
+  // #region GetBodySprite
+  if (prevDir == Vector2::Up) {
+    if (nextDir == Vector2::Up) return &Sprites::body_V;
+    if (nextDir == Vector2::Right) return &Sprites::body_V_UR;
+    if (nextDir == Vector2::Left) return &Sprites::body_V_UL;
+  }
+
+  if (prevDir == Vector2::Down) {
+    if (nextDir == Vector2::Down) return &Sprites::body_V;
+    if (nextDir == Vector2::Right) return &Sprites::body_V_DR;
+    if (nextDir == Vector2::Left) return &Sprites::body_V_DL;
+  }
+
+  if (prevDir == Vector2::Right) {
+    if (nextDir == Vector2::Right) return &Sprites::body_H;
+    if (nextDir == Vector2::Up) return &Sprites::body_H_LU;
+    if (nextDir == Vector2::Down) return &Sprites::body_H_LD;
+  }
+
+  if (prevDir == Vector2::Left) {
+    if (nextDir == Vector2::Left) return &Sprites::body_H;
+    if (nextDir == Vector2::Up) return &Sprites::body_H_RU;
+    if (nextDir == Vector2::Down) return &Sprites::body_H_RD;
+  }
+  // #endregion
+}
+
+void GameManager::EndGame() {
+  // #region EndGame
+  COORD coord = {0, 1};
+  SetConsoleCursorPosition(Display::consoleHandle, coord);
+  std::cout << "Game over";
+  isGameOver = true;
+  isPlaying = false;
+  // #endregion
+}
 
 void GameManager::SpawnSnake() {
   // #region SpawnSnake

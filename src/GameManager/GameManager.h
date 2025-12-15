@@ -47,6 +47,8 @@ private:
   static float ticksPerSecond;
   /// @brief The fixed delta time between ticks
   static float fixedDeltaTime;
+  /// @brief The time since the start of this fixed tick
+  static float currentTickTimer;
 
 
 public:
@@ -95,5 +97,22 @@ private:
   /// @brief Gets the current input direction
   /// @return The new direction vector
   static Vector2 GetInputDirection();
+
+  /// @brief Moves the snake to the next cell
+  /// @param nextCell The next cell to move to
+  /// @param didConsumeApple Whether the snake consumed an apple
+  static void MoveSnake(Vector2 nextCell, bool didConsumeApple);
+
+  /// @brief Ends the game
+  static void EndGame();
+
+  /// @brief Creates the body segment renderer
+  static void CreateBodyRenderer();
+
+  /// @brief Gets the correct body sprite based on the previous and next direction
+  /// @param prevDir The previous direction
+  /// @param nextDir The next direction
+  /// @return The correct body sprite
+  static Sprite *GetBodySprite(Vector2 prevDir, Vector2 nextDir);
 };
 } // namespace Snake
