@@ -212,6 +212,43 @@ Sprite *GameManager::GetBodySprite(Vector2 prevDir, Vector2 nextDir) {
   // #endregion
 }
 
+Vector2 GameManager::GetNewApplePossition() {
+  // #region GetNewApplePossition
+  bool isPositionSafe = false;
+  short gridPositions = Consts::MAP_X * Consts::MAP_Y;
+
+  Vector2 pos;
+
+  while (!isPositionSafe) {
+    int rnd = std::rand() % gridPositions;
+    short x = rnd % Consts::MAP_X;
+    short y = rnd / Consts::MAP_X;
+
+    isPositionSafe = IsCellSafe(Vector2(x, y));
+    if (isPositionSafe) pos = Vector2(x, y);
+  }
+
+  Vector2 screenPos = pos * offset;
+  if (appleRenderer == nullptr) {
+    appleRenderer = new SpriteRenderer(screenPos, &Sprites::apple);
+  } else appleRenderer->position = screenPos;
+
+  return pos;
+  // #endregion
+}
+
+bool GameManager::IsCellSafe(Vector2 cell) {
+  // #region IsCellSafe
+  if (cell.x < 0 || cell.x > Consts::MAP_X - 1 || cell.y < 0 || cell.y > Consts::MAP_Y - 1)
+    return false;
+
+  for (Vector2 snakCell : snake) {
+    if (snakCell == cell) return false;
+  }
+  return true;
+  // #endregion
+}
+
 void GameManager::EndGame() {
   // #region EndGame
   COORD coord = {0, 1};
