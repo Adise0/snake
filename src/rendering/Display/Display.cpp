@@ -1,10 +1,10 @@
 #include "Display.h"
+#include "../../GameManager/GameManager.h"
 #include "../../data/Consts/Consts.h"
 #include "../../objects/SpriteRenderer/SpriteRenderer.h"
 #include <algorithm>
 #include <codecvt>
 #include <iostream>
-
 
 
 using namespace Snake::Data;
@@ -17,6 +17,7 @@ char32_t Display::background[Consts::RESOLUTION_X][Consts::RESOLUTION_Y];
 char32_t Display::frameBuffer[Consts::RESOLUTION_X][Consts::RESOLUTION_Y];
 char32_t Display::screenBuffer[Consts::RESOLUTION_X][Consts::RESOLUTION_Y];
 std::queue<Vector2> Display::dirtyChars;
+short Display::topOffset = 4;
 // #endregion
 
 void Display::Initialize() {
@@ -25,6 +26,7 @@ void Display::Initialize() {
 
   HideCursor();
 
+  PrintHeader();
   InitializeBackground();
   InitializeBuffers();
 
@@ -182,14 +184,53 @@ void Display::Print() {
     short x = pos.x;
     short y = pos.y;
 
-    COORD consolePos = {x, y + 2};
+    COORD consolePos = {x, y + topOffset};
     SetConsoleCursorPosition(consoleHandle, consolePos);
 
     std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
     std::string converted = conv.to_bytes(screenBuffer[x][y]);
     std::cout << converted;
+
+    std::string applesString = "Apples: " + std::to_string(GameManager::apples);
+    consolePos = {5, (short)(topOffset / 2)};
+    SetConsoleCursorPosition(consoleHandle, consolePos);
+    std::cout << applesString;
+
+
+    std::string pointsString = "Points: " + std::to_string(GameManager::points);
+    consolePos = {(short)(Consts::RESOLUTION_X - 5 - pointsString.length()),
+                  (short)(topOffset / 2)};
+    SetConsoleCursorPosition(consoleHandle, consolePos);
+    std::cout << pointsString;
   }
   // #endregion
+}
+
+void Display::PrintHeader() {
+
+
+  std::u32string topSegment = U"";
+  std::u32string otherSegments = U"";
+
+  for (size_t i = 0; i < Consts::MAP_X * Consts::CELL_RESOLUTION_X - 1; i++) {
+    topSegment += U"\u2500";
+    otherSegments += U" ";
+  }
+
+  std::u32string topLine = U"\u250C" + topSegment + U"\u2510";
+  std::u32string otherLine = U"\u2502" + otherSegments + U"\u2502";
+
+  COORD consolePos = {0, 0};
+  SetConsoleCursorPosition(consoleHandle, consolePos);
+
+  std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
+  std::string topLineConverted = conv.to_bytes(topLine);
+  std::string lineConverted = conv.to_bytes(otherLine);
+
+  std::cout << topLineConverted << std::endl;
+  for (size_t i = 0; i < topOffset * Consts::CELL_RESOLUTION_Y; i++) {
+    std::cout << lineConverted << std::endl;
+  }
 }
 
 } // namespace Snake::Rendering

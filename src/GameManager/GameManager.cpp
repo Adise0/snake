@@ -34,6 +34,9 @@ float GameManager::ticksPerSecond = 6.0f;
 float GameManager::fixedDeltaTime = 0.0f;
 float GameManager::currentTickTimer = 0.0f;
 
+int GameManager::points = 0;
+int GameManager::apples = 0;
+
 
 void GameManager::Initialize() {
   // #region Initialize
@@ -111,14 +114,25 @@ void GameManager::FixedTick() {
   bool didConsumeApple = applePosition == nextCell;
 
   MoveSnake(nextCell, didConsumeApple);
-  if (didConsumeApple) applePosition = GetNewApplePossition();
+  if (didConsumeApple) {
+    apples++;
+    applePosition = GetNewApplePossition();
+  }
 
+  UpdatePoints(didConsumeApple);
   currentTick++;
   // #endregion
 }
 
-
 // #region Utils
+void GameManager::UpdatePoints(bool didConsumeApple) {
+  // #region UpdatePoints
+  points += snake.size() - 1;
+  if (didConsumeApple) points += Consts::APPLE_POINTS;
+  // #endregion
+}
+
+
 void GameManager::UpdateRenderers(float tickProgression) {
   // #region UpdateRenderers
   Vector2 prevHeadPos = snake.front() - currentDirection;

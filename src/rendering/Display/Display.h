@@ -20,6 +20,8 @@ private:
   static char32_t screenBuffer[Consts::RESOLUTION_X][Consts::RESOLUTION_Y];
   /// @brief The queue of scren positions to re-draw
   static std::queue<Vector2> dirtyChars;
+  /// @brief The offset from the top where the board starts
+  static short topOffset;
 
 public:
   /// @brief The console handle
@@ -47,6 +49,8 @@ private:
   /// @brief Prints the current dirty chars
   static void Print();
 
+  /// @brief Prints the initial header
+  static void PrintHeader();
 
 public: /// @brief Initializes the renderer
   static void Initialize();

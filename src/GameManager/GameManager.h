@@ -54,6 +54,11 @@ private:
   /// @brief The time since the start of this fixed tick
   static float currentTickTimer;
 
+public:
+  ///@brief The points
+  static int points;
+  ///@brief The consumed apples
+  static int apples;
 
 public:
   /// @brief Initializes the GameManager
@@ -102,6 +107,10 @@ private:
   /// @return The new direction vector
   static Vector2 GetInputDirection();
 
+  /// @brief Updates the points
+  /// @param didConsumeApple Whether an apple was consumed this frame
+  static void UpdatePoints(bool didConsumeApple);
+
   /// @brief Moves the snake to the next cell
   /// @param nextCell The next cell to move to
   /// @param didConsumeApple Whether the snake consumed an apple
@@ -127,8 +136,6 @@ private:
 
   /// @brief Updates the head and tail sprite renderers
   static void UpdateSprites();
-
-
 
   /// @brief Gets the correct body sprite based on the previous and next direction
   /// @param prevDir The previous direction
