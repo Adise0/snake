@@ -21,6 +21,7 @@ private:
   /// @brief The queue of scren positions to re-draw
   static std::queue<Vector2> dirtyChars;
 
+
 public:
   /// @brief The console handle
   static HANDLE consoleHandle;
@@ -47,10 +48,16 @@ private:
   /// @brief Prints the current dirty chars
   static void Print();
 
+  /// @brief Prints the initial header
+  static void PrintHeader();
 
 public: /// @brief Initializes the renderer
   static void Initialize();
+
   /// @brief Ticks the display
   static void Tick();
+
+  /// @brief Shows the game over screen
+  static void ShowGameOver();
 };
 } // namespace Snake::Rendering

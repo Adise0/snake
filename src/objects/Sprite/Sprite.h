@@ -14,7 +14,6 @@ private:
   /// @return The id to use
   static int GetNewId();
 
-
   /// @brief Gets the srpite rect
   /// @return The sprite rect
   static Vector2 GetRect(std::vector<std::u32string> characters);

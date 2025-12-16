@@ -17,12 +17,14 @@ public:
   /// @brief The vertical size of a Conssolas character (in pixels)
   static constexpr int CHAR_RESOLUTION_Y = 23;
 
+  /// @brief the points an apple gives
+  static constexpr short APPLE_POINTS = 15;
+  /// @brief The offset from the top where the board starts
+  static constexpr short TOP_OFFSET = 4;
+
   /// @brief The horizontal size of the whole map (in characters)
   static constexpr int RESOLUTION_X = MAP_X * CELL_RESOLUTION_X + 1;
   /// @brief The verrtical size of the whole map (in characters)
   static constexpr int RESOLUTION_Y = MAP_Y * CELL_RESOLUTION_Y + 1;
-
-  /// @brief The ticks per seccond to run the logic at
-  static constexpr int TICKS_PER_SECOND = 6;
 };
 } // namespace Snake::Data

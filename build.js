@@ -25,7 +25,9 @@ const findAllfiles = (currentPath) => {
       results = results.concat(findAllfiles(fullPath));
     } else if (
       file.isFile() &&
-      (file.name.endsWith(".cpp") || file.name.endsWith(".h"))
+      (file.name.endsWith(".cpp") || file.name.endsWith(".h")) &&
+      !file.name.endsWith(".old.h") &&
+      !file.name.endsWith(".old.cpp")
     ) {
       const hash = getFileHash(fullPath);
       results.push({ path: fullPath, hash });
