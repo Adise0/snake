@@ -14,9 +14,10 @@ void SpriteRenderer::RegisterSpriteRenderer(SpriteRenderer *spriteRenderer) {
 }
 
 void SpriteRenderer::UnregisterSpriteRenderer(SpriteRenderer *spriteRenderer) {
-
+  // #region UnregisterSpriteRenderer
   auto foundRenderer = std::find(spriteRenderers.begin(), spriteRenderers.end(), spriteRenderer);
   if (foundRenderer != spriteRenderers.end()) spriteRenderers.erase(foundRenderer);
+  // #endregion
 }
 
 

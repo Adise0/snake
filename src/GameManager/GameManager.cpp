@@ -134,7 +134,6 @@ void GameManager::UpdatePoints(bool didConsumeApple) {
   // #endregion
 }
 
-
 void GameManager::UpdateRenderers(float tickProgression) {
   // #region UpdateRenderers
   Vector2 prevHeadPos = snake.front() - currentDirection;
@@ -156,7 +155,6 @@ void GameManager::UpdateRenderer(SpriteRenderer *renderer, Vector2 prevPosition,
   renderer->position = screenPosition;
   // #endregion
 }
-
 
 float GameManager::GetFixedDeltaTime() {
   // #region GetFixedDeltaTime

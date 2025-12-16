@@ -94,6 +94,7 @@ private:
   /// @brief Spawns the head renderer
   /// @param position The position to spawn the renderer at
   static void SpawnHeadRenderer(Vector2 position);
+
   /// @brief Spawns the tail renderer
   /// @param position The position to spawn the renderer at
   static void SpawnTailRenderer(Vector2 position);
@@ -143,11 +144,9 @@ private:
   /// @return The correct body sprite
   static Sprite *GetBodySprite(Vector2 prevDir, Vector2 nextDir);
 
-
   /// @brief Gets the correct head sprite based on the current direction
   /// @return The correct head sprite
   static Sprite *GetHeadSprite();
-
 
   /// @brief Gets the correct tail sprite based on the previous and next direction
   /// @param prevDir The previous direction

@@ -121,11 +121,6 @@ void Display::FillBackground() {
 
 void Display::DrawSprites() {
   // #region DrawSprites
-
-  // std::cout << " Drawing: " << SpriteRenderer::spriteRenderers.size() << " sprites";
-
-
-
   for (SpriteRenderer *spriteRenderer : SpriteRenderer::spriteRenderers) {
     // std::cout << " - Should render: " << spriteRenderer->render << std::endl;
     if (!spriteRenderer->render) continue;
@@ -205,7 +200,7 @@ void Display::Print() {
 }
 
 void Display::PrintHeader() {
-
+  // #region PrintHeader
 
   std::u32string topSegment = U"";
   std::u32string otherSegments = U"";
@@ -229,10 +224,11 @@ void Display::PrintHeader() {
   for (size_t i = 0; i < Consts::TOP_OFFSET * Consts::CELL_RESOLUTION_Y; i++) {
     std::cout << lineConverted << std::endl;
   }
+  // #endregion
 }
 
 void Display::ShowGameOver() {
-
+  // #region ShowGameOver
   std::string gameOverString = "Game Over!";
 
   short x = Consts::RESOLUTION_X / 2 - (gameOverString.length() / 2) - 5;
@@ -253,6 +249,7 @@ void Display::ShowGameOver() {
   COORD consolePos = {x + 5, y + 2};
   SetConsoleCursorPosition(consoleHandle, consolePos);
   std::cout << gameOverString;
+  // #endregion
 }
 
 } // namespace Snake::Rendering

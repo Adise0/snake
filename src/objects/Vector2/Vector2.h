@@ -5,9 +5,13 @@ struct Vector2 {
 public:
   /// @brief Vector2 with x and y set to 0
   static Vector2 Zero;
+  /// @brief Vector2 with x set to 1 and y set to 0
   static Vector2 Right;
+  /// @brief Vector2 with x set to -1 and y set to 0
   static Vector2 Left;
+  /// @brief Vector2 with x set to 0 and y set to -1
   static Vector2 Up;
+  /// @brief Vector2 with x set to 0 and y set to 1
   static Vector2 Down;
 
 public:

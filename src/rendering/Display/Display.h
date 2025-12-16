@@ -53,8 +53,10 @@ private:
 
 public: /// @brief Initializes the renderer
   static void Initialize();
+
   /// @brief Ticks the display
   static void Tick();
+
   /// @brief Shows the game over screen
   static void ShowGameOver();
 };
