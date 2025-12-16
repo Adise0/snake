@@ -139,16 +139,13 @@ void GameManager::SpawnTailRenderer(Vector2 position) {
   bool tailRendererExists = tailRenderer != nullptr;
   if (tailRendererExists) {
     tailRenderer->position = position;
-    tailRenderer->render = false;
     return;
   }
 
   tailRenderer = new SpriteRenderer(position, &Sprites::tail_right);
-  tailRenderer->render = false;
   tailRenderer->sortingLayer = 1;
   // #endregion
 }
-
 
 bool GameManager::IsKeyPressed(int key) {
   // #region IsKeyPressed
@@ -269,13 +266,14 @@ void GameManager::SpawnSnake() {
   snake.clear();
   Vector2 centerCell = Vector2(Consts::MAP_X / 2, Consts::MAP_Y / 2);
   snake.push_front(centerCell);
+  snake.push_back(centerCell + Vector2::Left);
 
 
-  Vector2 screenPosition =
-      Vector2(centerCell.x * Consts::CELL_RESOLUTION_X, centerCell.y * Consts::CELL_RESOLUTION_Y);
+  Vector2 headPosition = centerCell * offset;
+  Vector2 tailPosition = (centerCell + Vector2::Left) * offset;
 
-  SpawnHeadRenderer(screenPosition);
-  SpawnTailRenderer(screenPosition);
+  SpawnHeadRenderer(headPosition);
+  SpawnTailRenderer(tailPosition);
   // #endregion
 }
 // #endregion
