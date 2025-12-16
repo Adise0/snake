@@ -26,7 +26,5 @@ int main() {
     std::cout << "Unhandled runtime exception";
   }
 
-  _sleep(1000);
-  system("pause");
   return 0;
 }

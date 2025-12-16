@@ -55,8 +55,12 @@ void GameManager::Run() {
   // #region Run
   auto lastFrame = std::chrono::high_resolution_clock::now();
 
-  while (!isGameOver) {
+  while (true) {
 
+    if (isGameOver) {
+      _sleep(1000);
+      continue;
+    }
     auto thisFrame = std::chrono::high_resolution_clock::now();
     float deltaTime = std::chrono::duration<float>(thisFrame - lastFrame).count();
     lastFrame = thisFrame;
