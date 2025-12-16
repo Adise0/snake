@@ -28,7 +28,7 @@ void Config::SetConsoleSize() {
   //TOODO: Grab actual font values!
 
   int width = Consts::RESOLUTION_X * Consts::CHAR_RESOLUTION_X;
-  int height = Consts::RESOLUTION_Y * Consts::CHAR_RESOLUTION_Y;
+  int height = Consts::RESOLUTION_Y + Consts::TOP_OFFSET * Consts::CHAR_RESOLUTION_Y;
 
 
   if (owner == NULL) {

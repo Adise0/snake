@@ -18,7 +18,9 @@ public:
   static constexpr int CHAR_RESOLUTION_Y = 23;
 
   /// @brief the points an apple gives
-  static constexpr int APPLE_POINTS = 15;
+  static constexpr short APPLE_POINTS = 15;
+  /// @brief The offset from the top where the board starts
+  static constexpr short TOP_OFFSET = 4;
 
   /// @brief The horizontal size of the whole map (in characters)
   static constexpr int RESOLUTION_X = MAP_X * CELL_RESOLUTION_X + 1;
