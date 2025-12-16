@@ -21,6 +21,8 @@ Vector2 GameManager::offset = Vector2(Consts::CELL_RESOLUTION_X, Consts::CELL_RE
 SpriteRenderer *GameManager::headRenderer = nullptr;
 SpriteRenderer *GameManager::tailRenderer = nullptr;
 SpriteRenderer *GameManager::appleRenderer = nullptr;
+std::queue<SpriteRenderer> GameManager::snakeRenderers;
+
 
 int GameManager::currentFrame = 0;
 int GameManager::currentTick = 0;
@@ -50,17 +52,15 @@ void GameManager::Run() {
   // #region Run
   auto lastFrame = std::chrono::high_resolution_clock::now();
 
-  float accumulator = 0.0f;
-
   while (!isGameOver) {
 
     auto thisFrame = std::chrono::high_resolution_clock::now();
     float deltaTime = std::chrono::duration<float>(thisFrame - lastFrame).count();
     lastFrame = thisFrame;
 
-    accumulator += deltaTime;
-    if (accumulator >= fixedDeltaTime) {
-      accumulator = 0;
+    currentTickTimer += deltaTime;
+    if (currentTickTimer >= fixedDeltaTime) {
+      currentTickTimer = 0;
       FixedTick();
     }
 
@@ -78,13 +78,17 @@ void GameManager::Tick(float deltaTime) {
 
   if (!isPlaying) return;
 
-  currentTickTimer += deltaTime;
   float tickProgression = currentTickTimer / fixedDeltaTime;
   tickProgression = std::clamp(tickProgression, 0.0f, 1.0f);
 
 
   if (inputedDirection != Vector2::Zero && inputedDirection != currentDirection.Inverse())
     bufferedDirection = inputedDirection;
+
+
+  UpdateRenderers(tickProgression);
+
+  currentFrame++;
 
   Display::Tick();
   // #endregion
@@ -109,12 +113,35 @@ void GameManager::FixedTick() {
   MoveSnake(nextCell, didConsumeApple);
   if (didConsumeApple) applePosition = GetNewApplePossition();
 
-
+  currentTick++;
   // #endregion
 }
 
 
 // #region Utils
+void GameManager::UpdateRenderers(float tickProgression) {
+  // #region UpdateRenderers
+  Vector2 prevHeadPos = snake.front() - currentDirection;
+  Vector2 nextHeadPos = snake.front();
+  UpdateRenderer(headRenderer, prevHeadPos, nextHeadPos, tickProgression);
+
+  Vector2 prevTailPos = snake.back() - prevTailDirection;
+  Vector2 nextTailPos = snake.back();
+  UpdateRenderer(tailRenderer, prevTailPos, nextTailPos, tickProgression);
+  // #endregion
+}
+
+void GameManager::UpdateRenderer(SpriteRenderer *renderer, Vector2 prevPosition,
+                                 Vector2 nextPosition, float tickProgression) {
+  // #regionUpdateRenderer
+  Vector2 screenPosition =
+      (prevPosition * offset) + ((nextPosition - prevPosition) * offset * tickProgression);
+
+  renderer->position = screenPosition;
+  // #endregion
+}
+
+
 float GameManager::GetFixedDeltaTime() {
   // #region GetFixedDeltaTime
   return 1.0f / ticksPerSecond;
@@ -166,19 +193,38 @@ Vector2 GameManager::GetInputDirection() {
 void GameManager::MoveSnake(Vector2 nextCell, bool didConsumeApple) {
   // #region MoveSnake
   snake.push_front(nextCell);
-  if (!didConsumeApple) snake.pop_back();
+  prevTailDirection = snake[snake.size() - 2] - snake.back();
+  if (!didConsumeApple) {
+    snake.pop_back();
+    if (snakeRenderers.size() != 0) snakeRenderers.pop();
+  }
 
-  if (snake.size() < 2) return;
+  UpdateSprites();
+  // if (snake.size() < 2) return;
   CreateBodyRenderer();
+  // #endregion
+}
+
+void GameManager::UpdateSprites() {
+  // #region UpdateSprites
+  Sprite *headSprite = GetHeadSprite();
+  if (headRenderer->sprite != headSprite) headRenderer->sprite = headSprite;
+
+
+  Vector2 nextTailDir = snake[snake.size() - 2] - snake.back();
+  Sprite *tailSprite = GetTailSprite(prevTailDirection, nextTailDir);
+  if (tailRenderer->sprite != tailSprite) tailRenderer->sprite = tailSprite;
+
   // #endregion
 }
 
 void GameManager::CreateBodyRenderer() {
   // #region CreateBodyRenderer
-  Vector2 prevHeadDirection = snake[0] - snake[1];
-  Vector2 nextHeadDirection = snake[1] - snake[2];
+  Vector2 prevHeadDirection = snake[1] - snake[0];
+  Vector2 nextHeadDirection = snake[2] - snake[1];
 
   Sprite *sprite = GetBodySprite(prevHeadDirection, nextHeadDirection);
+  snakeRenderers.emplace(snake[1] * offset, sprite);
   // #endregion
 }
 
@@ -211,6 +257,55 @@ Sprite *GameManager::GetBodySprite(Vector2 prevDir, Vector2 nextDir) {
   throw std::runtime_error("Invalid body sprite directions " + std::to_string(prevDir.x) + "," +
                            std::to_string(prevDir.y) + " to " + std::to_string(nextDir.x) + "," +
                            std::to_string(nextDir.y));
+  // #endregion
+}
+
+Sprite *GameManager::GetTailSprite(Vector2 prevDir, Vector2 nextDir) {
+  // #region GetTailSprite
+  if (prevDir == Vector2::Up) {
+    if (nextDir == Vector2::Up) return &Sprites::tail_up;
+    if (nextDir == Vector2::Right) return &Sprites::tail_V_UR;
+    if (nextDir == Vector2::Left) return &Sprites::tail_V_UL;
+  }
+  if (prevDir == Vector2::Down) {
+    if (nextDir == Vector2::Down) return &Sprites::tail_down;
+    if (nextDir == Vector2::Right) return &Sprites::tail_V_DR;
+    if (nextDir == Vector2::Left) return &Sprites::tail_V_DL;
+  }
+  if (prevDir == Vector2::Right) {
+    if (nextDir == Vector2::Right) return &Sprites::tail_right;
+    if (nextDir == Vector2::Up) return &Sprites::tail_H_LU;
+    if (nextDir == Vector2::Down) return &Sprites::tail_H_LD;
+  }
+  if (prevDir == Vector2::Left) {
+    if (nextDir == Vector2::Left) return &Sprites::tail_left;
+    if (nextDir == Vector2::Up) return &Sprites::tail_H_RU;
+    if (nextDir == Vector2::Down) return &Sprites::tail_H_RD;
+  }
+  // Should never reach here
+  throw std::runtime_error("Invalid tail sprite directions " + std::to_string(prevDir.x) + "," +
+                           std::to_string(prevDir.y) + " to " + std::to_string(nextDir.x) + "," +
+                           std::to_string(nextDir.y));
+  // #endregion
+}
+
+
+Sprite *GameManager::GetHeadSprite() {
+  // #region GetHeadSprite
+  if (currentDirection == Vector2::Right) {
+    return &Sprites::head_right;
+  }
+  if (currentDirection == Vector2::Left) {
+    return &Sprites::head_left;
+  }
+  if (currentDirection == Vector2::Up) {
+    return &Sprites::head_up;
+  }
+  if (currentDirection == Vector2::Down) {
+    return &Sprites::head_down;
+  }
+  // Should never reach here
+  throw std::runtime_error("Invalid current direction");
   // #endregion
 }
 
@@ -267,13 +362,14 @@ void GameManager::SpawnSnake() {
   Vector2 centerCell = Vector2(Consts::MAP_X / 2, Consts::MAP_Y / 2);
   snake.push_front(centerCell);
   snake.push_back(centerCell + Vector2::Left);
-
+  prevTailDirection = Vector2::Right;
 
   Vector2 headPosition = centerCell * offset;
   Vector2 tailPosition = (centerCell + Vector2::Left) * offset;
 
   SpawnHeadRenderer(headPosition);
   SpawnTailRenderer(tailPosition);
+  // snakeRenderers.emplace(snake.back() * offset, &Sprites::body_H);
   // #endregion
 }
 // #endregion

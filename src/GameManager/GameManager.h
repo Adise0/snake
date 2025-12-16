@@ -3,6 +3,7 @@
 #include "../objects/Vector2/Vector2.h"
 #include <deque>
 #include <optional>
+#include <queue>
 #include <vector>
 
 using namespace Snake::Data;
@@ -32,6 +33,9 @@ private:
   static SpriteRenderer *tailRenderer;
   /// @brief The apple renderer
   static SpriteRenderer *appleRenderer;
+
+  /// @brief The stored snake body renderers
+  static std::queue<SpriteRenderer> snakeRenderers;
 
   /// @brief The current frame counter
   static int currentFrame;
@@ -109,10 +113,39 @@ private:
   /// @brief Creates the body segment renderer
   static void CreateBodyRenderer();
 
+  /// @brief Updates the head and tail renderers
+  /// @param tickProgression The current tick fixxed progression (0-1)
+  static void UpdateRenderers(float tickProgression);
+
+  /// @brief Updates the passed renderer
+  /// @param renderer The renderer to update
+  /// @param prevPosition The initial fixedTickPosition of the renderer
+  /// @param nextPosition The target position for the end of the tick
+  /// @param tickProgression The current tick fixxed progression (0-1)
+  static void UpdateRenderer(SpriteRenderer *renderer, Vector2 prevPosition, Vector2 nextPosition,
+                             float tickProgression);
+
+  /// @brief Updates the head and tail sprite renderers
+  static void UpdateSprites();
+
+
+
   /// @brief Gets the correct body sprite based on the previous and next direction
   /// @param prevDir The previous direction
   /// @param nextDir The next direction
   /// @return The correct body sprite
   static Sprite *GetBodySprite(Vector2 prevDir, Vector2 nextDir);
+
+
+  /// @brief Gets the correct head sprite based on the current direction
+  /// @return The correct head sprite
+  static Sprite *GetHeadSprite();
+
+
+  /// @brief Gets the correct tail sprite based on the previous and next direction
+  /// @param prevDir The previous direction
+  /// @param nextDir The next direction
+  /// @return The correct tail sprite
+  static Sprite *GetTailSprite(Vector2 prevDir, Vector2 nextDir);
 };
 } // namespace Snake
