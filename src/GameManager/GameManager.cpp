@@ -341,7 +341,7 @@ Vector2 GameManager::GetNewApplePossition() {
 
   Vector2 screenPos = pos * offset;
   if (appleRenderer == nullptr) {
-    appleRenderer = new SpriteRenderer(screenPos, &Sprites::apple);
+    appleRenderer = new SpriteRenderer(screenPos, &Sprites::appleSprite);
   } else appleRenderer->position = screenPos;
 
   return pos;
@@ -362,11 +362,9 @@ bool GameManager::IsCellSafe(Vector2 cell) {
 
 void GameManager::EndGame() {
   // #region EndGame
-  COORD coord = {0, 1};
-  SetConsoleCursorPosition(Display::consoleHandle, coord);
-  std::cout << "Game over";
   isGameOver = true;
   isPlaying = false;
+  Display::ShowGameOver();
   // #endregion
 }
 

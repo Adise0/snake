@@ -68,6 +68,7 @@ public:
   // #endregion
   // #endregion
 
-  static Sprite apple;
+  /// @brief The apple sprite
+  static Sprite appleSprite;
 };
 } // namespace Snake::Data

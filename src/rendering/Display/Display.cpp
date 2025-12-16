@@ -1,6 +1,7 @@
 #include "Display.h"
 #include "../../GameManager/GameManager.h"
 #include "../../data/Consts/Consts.h"
+#include "../../data/Sprites/Sprites.h"
 #include "../../objects/SpriteRenderer/SpriteRenderer.h"
 #include <algorithm>
 #include <codecvt>
@@ -151,8 +152,6 @@ void Display::DrawSprites() {
           continue;
         }
 
-        // std::cout << "Setting char " << characters[spriteY][spriteX] << std::endl;
-
         frameBuffer[x][y] = characters[spriteY][spriteX];
       }
     }
@@ -230,6 +229,30 @@ void Display::PrintHeader() {
   for (size_t i = 0; i < Consts::TOP_OFFSET * Consts::CELL_RESOLUTION_Y; i++) {
     std::cout << lineConverted << std::endl;
   }
+}
+
+void Display::ShowGameOver() {
+
+  std::string gameOverString = "Game Over!";
+
+  short x = Consts::RESOLUTION_X / 2 - (gameOverString.length() / 2) - 5;
+  short y = (Consts::TOP_OFFSET) + (Consts::RESOLUTION_Y / 2) - 2;
+
+  for (size_t row = 0; row < gameOverString.length() + 10; row++) {
+    for (size_t col = 0; col < 5; col++) {
+      short sprX = x + row;
+      short sprY = y + col;
+
+      COORD consolePos = {sprX, sprY};
+      SetConsoleCursorPosition(consoleHandle, consolePos);
+      std::cout << " ";
+    }
+  }
+
+
+  COORD consolePos = {x + 5, y + 2};
+  SetConsoleCursorPosition(consoleHandle, consolePos);
+  std::cout << gameOverString;
 }
 
 } // namespace Snake::Rendering
