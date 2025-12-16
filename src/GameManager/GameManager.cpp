@@ -9,7 +9,7 @@ using namespace Snake;
 using namespace Rendering;
 using namespace Data;
 
-
+// #region Data
 Vector2 GameManager::applePosition = Vector2(-1, -1);
 std::deque<Vector2> GameManager::snake;
 
@@ -36,7 +36,7 @@ float GameManager::currentTickTimer = 0.0f;
 
 int GameManager::points = 0;
 int GameManager::apples = 0;
-
+// #endregion
 
 void GameManager::Initialize() {
   // #region Initialize
@@ -49,7 +49,6 @@ void GameManager::Initialize() {
   Run();
   // #endregion
 }
-
 
 void GameManager::Run() {
   // #region Run
@@ -75,7 +74,6 @@ void GameManager::Run() {
   }
   // #endregion
 }
-
 
 void GameManager::Tick(float deltaTime) {
   // #region Tick
