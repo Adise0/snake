@@ -17,9 +17,13 @@ public:
   // #endregion
 
   // #region Tails
+  /// @brief The tail sprite facing right
   static Sprite tail_right;
+  /// @brief The tail sprite facing left
   static Sprite tail_left;
+  /// @brief The tail sprite facing up
   static Sprite tail_up;
+  /// @brief The tail sprite facing down
   static Sprite tail_down;
 
   // #region Corners
@@ -44,7 +48,9 @@ public:
   // #endregion
 
   // #region Body
+  /// @brief The horizontal body sprite
   static Sprite body_V;
+  /// @brief The vertical body sprite
   static Sprite body_H;
 
   // #region Corners
